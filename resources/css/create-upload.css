@@ -1,0 +1,185 @@
+.flat-wrap {
+    min-height:800px;
+    padding: 50px 100px;
+    display: flex;
+    background: #f6f9fc;
+}
+.flat-inner-wrap {
+    flex: 1;
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    padding:40px;
+    box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+    background: #ffffff;
+    border-radius: 25px;
+}
+.sheet-info {
+    display: flex;
+    flex-direction: column;
+}
+label {
+    margin-bottom: 15px;
+    margin-top: 14px;
+    font-size: 16px;
+}
+
+h2{
+    margin-bottom: 30px;
+}
+
+.flat-part-left {
+    flex: 2;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    z-index: 2;
+}
+
+.flat-part-right {
+    flex: 3;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+.create-btn {
+    background: transparent;
+    border-radius: 25px;
+    border: 3px solid #0d6efd;
+    padding: 5px 10px;
+    align-self: center;
+    margin-top: 50px;
+}
+
+.choose-alert {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+}
+
+.opt {
+    min-width: 250px;
+    border-radius: 25px;
+}
+
+.slct {
+    text-align: center;
+    background: transparent;
+    border: 3px solid #0d6efd;
+    border-radius: 25px;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.instruments-for-sheet {
+    display: none;
+    padding-top: 30px;
+}
+
+.first-hidden {
+    display: none;
+}
+
+.check {
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    width: 25%;
+}
+.check input{
+    width: 20px;
+    height: 20px;
+}
+
+.inner-wrp {
+    display: flex;
+    flex-wrap: wrap;
+}
+
+.wrapper {
+    flex-direction: column;
+    padding-top: 30px;
+}
+
+input[type="text"]{
+    width: 100%;
+    background: #f0f0f045;
+    height: 50px;
+    border: none;
+    border-bottom: 2px solid rgba(128, 128, 128, 0.603);
+    padding-left: 10px;
+}
+
+input[type="text"]:focus-visible{
+    outline: none;
+}
+
+input[type="text"]:focus{
+    border-color: #0d6efd;
+}
+
+#songList{
+    background: #f0f0f045;
+    box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+    max-height: 210px;
+    overflow-y: scroll;
+    display: none;
+}
+
+#songList li{
+    padding: 10px 10px;
+    border-bottom: 1px solid lightgray;
+    cursor: pointer;
+}
+
+#songList li:hover{
+    background: #f0f0f0;
+}
+
+#embed-example{
+    border-radius: 5px;
+    overflow: hidden;
+    box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+}
+
+.btn-group-toggle input{
+    display: none;
+}
+
+.btn-group-toggle label:first-child{
+    border-top-left-radius: 20px;
+    border-bottom-left-radius: 20px;
+}
+
+.btn-group-toggle label:last-child{
+    border-top-right-radius: 20px;
+    border-bottom-right-radius: 20px;
+}
+
+.btn-group-toggle label.active{
+    background-color: #3763eb;
+}
+
+.btn-group-toggle label{
+    background-color: #839ff1;
+    border-color: transparent;
+}
+
+.btn-group-toggle label:hover{
+    background-color: #3763eb;
+}
+
+#newSongContainer{
+    display: flex;
+    padding: 20px 10px;
+    border-radius: 5px;
+    box-shadow: rgb(50 50 50 / 7%) 2px 2px 12px 0px inset;
+}
+
+select:focus{
+    border-color: #3763eb !important;
+    box-shadow: 0 0 0 0.25rem rgb(55 99 235 / 40%) !important;
+}

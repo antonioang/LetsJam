@@ -1,0 +1,9 @@
+.flag-container{
+    display: flex;
+    align-items: center;
+    cursor: pointer;
+}
+.flag-container img{
+    width: 30px;
+    height: 30px;
+}

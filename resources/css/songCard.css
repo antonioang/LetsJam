@@ -1,0 +1,94 @@
+.song-card{
+    padding: 20px 30px;
+    background-color: white;
+    border-radius: 10px;
+    position: relative;
+    z-index: 2;
+    transition: all 0.4s ease;
+    -webkit-transition: all 0.4s ease;
+    -moz-transition: all 0.4s ease;
+    box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px;
+    cursor: pointer;
+}
+.song-card span{
+    font-weight: 500;
+    color: #3763eb;
+}
+
+.song-card h3{
+    color: black;
+}
+
+.song-card::before{
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    height: 100%;
+    width: 100%;
+    background-color: #3763eb;
+    content: "";
+    z-index: -1;
+    border-radius: 10px;
+    -webkit-transform: scale(1);
+    transform: scale(1);
+    -webkit-transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+    transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+    -moz-transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+    opacity: 0;
+    visibility: hidden;
+}
+
+.song-card:hover::before {
+    opacity: 1;
+    visibility: visible;
+    -webkit-transform: scale(1.01);
+    transform: scale(1.01);
+    animation-duration: .5s;
+}
+
+.song-card:hover{
+    background-color: #3763EB;
+}
+
+.song-card:hover p, .song-card:hover h3, .song-card:hover span{
+    color: white;
+}
+
+.song-card:hover .icon{
+    background-color: white;
+}
+
+.song-card:hover .icon svg{
+    fill: #3763eb;
+}
+
+.song-card:hover .song-image{
+    border: 3px solid white;
+}
+
+.song-card .icon{
+    width: 30px;
+    height: 30px;
+}
+
+.song-image{
+    width: 150px;
+    height: 150px;
+    border-radius: 5%;
+    border: 3px solid #3763EB;
+    box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+}
+
+.song-info-container{
+    height: 100%;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: flex-start;
+}

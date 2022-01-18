@@ -1,0 +1,58 @@
+.scores-view .musicsheet-card{
+    background-color: white;
+}
+
+@keyframes scaleBadge {
+    from {transform: scale(1) translateX(0)}
+    to {transform: scale(1.3) translateX(20px)}
+}
+
+.verify-badge {
+    animation: scaleBadge 1s ease-in-out .5s 1 forwards;
+}
+
+.verified {
+    margin-top: 12px;
+}
+
+.modal-wrap{
+    position: fixed;
+    height: 30vh;
+    width: 30vw;
+    top: 35vh;
+    left: 35vw;
+    display: none;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+    z-index: 99999;
+    background-color: #0d6efd;
+    border-radius: 25px;
+}
+.modal-wrap span{
+    color: #ffffff;
+}
+
+.verify-btn {
+    position: relative;
+}
+.verify-btn-detail-pg {
+    position: static;
+}
+.verify-btn .action-container {
+    position: absolute;
+    z-index: 9999999;
+    bottom: 55px;
+    right: 50px;
+    cursor: pointer;
+    width: 200px;
+}
+.verify-btn-detail-pg .action-container {
+    position: relative ;
+    z-index: unset;
+    bottom: unset;
+    right: unset;
+    cursor: pointer;
+    margin-top: 35px;
+    width: 200px;
+}

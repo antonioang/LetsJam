@@ -1,0 +1,187 @@
+.musicsheet-card {
+  padding: 20px 30px;
+  background-color: #f6f9fc;
+  border-radius: 10px;
+  position: relative;
+  z-index: 2;
+  transition: all 0.4s ease;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+}
+
+.round {
+  border-radius: 50% !important;
+}
+
+.verified-badge{
+  padding: 10px 20px;
+  margin-right: 40px;
+  background: #4c9a50;
+  color: white;
+  font-weight: 600;
+  border-radius: 1rem;
+  box-shadow: 0px 1px 20px 0px rgb(50 50 50 / 10%);
+  gap: 10px;
+}
+.not-verified-badge{
+  background: #808080;
+}
+
+.verified-badge svg{
+  width: 20% !important;
+  height: 20% !important;
+  fill: white;
+}
+
+svg {
+  width: 50% !important;
+  height: 50% !important;
+}
+
+.musicsheet-card p {
+  font-size: 14px;
+  margin: 0;
+  transition: all 0.4s ease;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+}
+
+.musicsheet-card::before {
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  height: 100%;
+  width: 100%;
+  background-color: #3763eb;
+  content: "";
+  z-index: -1;
+  border-radius: 10px;
+  -webkit-transform: scale(1);
+  transform: scale(1);
+  -webkit-transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+  transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+  -moz-transition: all 0.4s cubic-bezier(0.94, 0.05, 0.23, 1.04);
+  opacity: 0;
+  visibility: hidden;
+}
+
+.musicsheet-card .avatar {
+  border-radius: 50%;
+  width: 50px;
+  height: 50px;
+  background-color: #3763eb;
+  background-size: cover !important;
+  background-position: center !important;
+}
+
+.musicsheet-card span {
+  font-weight: 600;
+  margin-right: 10px;
+  color: #3763eb;
+}
+
+/** ---- HOVER --- **/
+
+.musicsheet-card:hover::before {
+  opacity: 1;
+  visibility: visible;
+  -webkit-transform: scale(1.05);
+  transform: scale(1.05);
+}
+
+.musicsheet-card:hover h3 a {
+  color: #fff;
+}
+
+.musicsheet-card:hover p {
+  color: #fff;
+}
+
+.musicsheet-card:hover .icon {
+  background-color: #fff;
+}
+
+.musicsheet-card:hover .icon ::after {
+  background-color: #fff;
+  width: 30px;
+}
+
+.musicsheet-card:hover .icon i {
+  color: #3763eb;
+}
+
+.musicsheet-card:hover span {
+  color: white;
+}
+
+.musicsheet-card:hover {
+  cursor: pointer;
+}
+
+.musicsheet-card:hover svg {
+  fill: #3763eb;
+}
+
+.musicsheet-card:hover h3 {
+  color: white;
+}
+
+.musicsheet-card:hover .action-container{
+  background-color: white;
+}
+
+.musicsheet-card:hover .action-container span{
+  color: #3763eb;
+}
+
+/** ---- END HOVER --- **/
+
+.interaction-container .icon {
+  height: 40px;
+  width: 40px;
+  margin: 0;
+}
+
+.interaction-container .icon i::after {
+  display: none;
+}
+
+.action-container {
+  background-color: #3763eb;
+  gap: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: 40px;
+  width: fit-content;
+  padding-left: 10px;
+  padding-right: 5px;
+  line-height: 60px;
+  text-align: center;
+  font-size: 25px;
+  position: relative;
+  transition: all 0.4s ease;
+  -webkit-transition: all 0.4s ease;
+  -moz-transition: all 0.4s ease;
+  border-radius: 10px;
+}
+
+.action-container span {
+  font-size: 10px;
+  color: white;
+  margin: 0;
+}
+
+.action-container svg{
+  fill: white;
+}
+
+.icon img {
+  width: 70%;
+  height: 70%;
+}
+
+.about-us .musicsheet-card{
+  background-color: white;
+}
