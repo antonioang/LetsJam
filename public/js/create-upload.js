@@ -17,6 +17,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     document.querySelector('div.submit').addEventListener('click', e => {
         embed.getJSON().then(json => {
+            console.log(json)
             document.querySelector('#musicSheetContent').value = JSON.stringify(json);
             document.querySelector('#createForm').submit();
         });
@@ -107,6 +108,9 @@ function uploadFile(embed, file) {
                 let formData = new FormData();
                 formData.append("score", JSON.stringify(score));
                 return await fetch('/musicsheets/analyze', {
+                    headers: {
+                        'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
+                    },
                     method: "POST",
                     ContentType: "multipart/form-data",
                     processData: false,
@@ -170,6 +174,7 @@ function searchForSongs(e) {
         method: "GET",
         ContentType: "application/json",
     }).then((response) => {
+        // console.log(response.json())
         return response.json()
     }).then(data => {
         let list = document.getElementById('songList');

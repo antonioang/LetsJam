@@ -3,9 +3,15 @@
 namespace App\Http\Controllers;
 
 use App\Models\Instrument;
+use App\Models\Song;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\MusicSheet;
+use Illuminate\Support\Facades\Auth;
+use mysql_xdevapi\Exception;
+use PhpParser\Node\Expr\Cast\Object_;
+use SpotifyWebAPI\Session;
+use SpotifyWebAPI\SpotifyWebAPI;
 
 class MusicSheetController extends Controller
 {
@@ -44,7 +50,54 @@ class MusicSheetController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $jsonBrano = $request->input('brano');
+        $brano = json_decode($jsonBrano);
+        $musicSheet = new MusicSheet;
+        $musicSheet->title = 'Me';
+        $musicSheet->author = 'me@yahoo.com';
+        $musicSheet->verified = 1;
+        $musicSheet->visibility = 1;
+        $musicSheet->rearranged = 1;
+        $musicSheet->music_sheet_data = $request->input('content');
+        $musicSheet->song_id = 1;
+        $musicSheet->has_tablature = 0;
+        $musicSheet->user_id = auth()->user()->id;
+        // add more fields (all fields that users table contains without id)
+        $musicSheet->save();
+        dd(
+            $request->input('title'),
+            $request->input('author'),
+            $request->input('songType'),
+            $request->input('songTitle'),
+            $request->input('songAuthor'),
+            $request->input('song'),
+            $request->input('songGenre'),
+            $request->input('brano'),
+            $request->input('content'),
+            $request->input('songType'),
+            $request->input('visibility'),
+            $request->input('musicSheetVisibility'),
+        );
+    }
+
+    public function analyzeScore(Request $request)
+    {
+        $score = json_decode($request->input('score'), true);
+        try {
+            $title = $score['score-partwise']['work']['work-title'];
+        } catch (\ErrorException $e) {
+            $title = '';
+        }
+        try {
+            $author = $score['score-partwise']['identification']['creator']['content'];
+        } catch (\ErrorException $e) {
+            $author = '';
+        }
+
+        return response()->json([
+            'title' => $title,
+            'author' => $author
+        ]);
     }
 
     /**
@@ -122,8 +175,77 @@ class MusicSheetController extends Controller
         ]);
     }
 
-    public function searchSong(Request $request) {
-        echo $request;
+    public function searchSong(Request $request)
+    {
+        $songToSearch = $request->query()['songSearchString'];
+        $toRemove = [];
+        $result = [];
+
+        $dbSongs = Song::where('title', 'LIKE', '%' . $songToSearch . '%')
+            ->orWhere('author', 'LIKE', '%' . $songToSearch . '%')->get();
+        $spotifySongs = $this->searchSpotifySongs($songToSearch);
+
+        if (!$dbSongs->isEmpty()) {
+            foreach ($dbSongs as $song) {
+                foreach ($spotifySongs as $spotySong) {
+                    if ($song->spotify_id == $spotySong->id) {
+                        $toRemove[] = array_search($spotySong, $spotifySongs);
+                    }
+                }
+            }
+            foreach ($dbSongs as $song) {
+                $result[] = [
+                    'title' => $song->title,
+                    'author' => $song->author,
+                    'spotifyId' => $song->spotify_id,
+                    'id' => $song->id,
+                ];
+            }
+        }
+        //prendi song to remove e rimuovi da spotisongs
+        if (!empty($toRemove) && !empty($spotifySongs)) {
+            foreach ($toRemove as $spoty) {
+                unset($spotifySongs[$spoty]);
+            }
+        }
+//
+        if (!empty($spotifySongs)) {
+            foreach ($spotifySongs as $spoty) {
+                $autore = '';
+                foreach ($spoty->artists as $author) {
+                    $autore .= $author->name . ' ';
+                }
+                $branoSpoty = [
+                    'title' => $spoty->name,
+                    'author' => $autore,
+                    'spotifyId' => $spoty->id,
+                    'id' => null,
+                ];
+                $result[] = $branoSpoty;
+            }
+        }
+
+        return response()->json($result);
+    }
+
+    private function searchSpotifySongs($param)
+    {
+        $session = new Session(
+            '9f22edd2825c42cfb4cdf87dcc0022b0',
+            'cf2f60097c5d4072a3fca62d9c2991af',
+        );
+
+        $session->requestCredentialsToken();
+        $accessToken = $session->getAccessToken();
+
+        $api = new SpotifyWebAPI();
+        $api->setAccessToken($accessToken);
+        $result = $api->search($param, 'track', ['limit' => 5]);
+        if ($result) {
+            return $result->tracks->items;
+        } else {
+            return null;
+        }
     }
 
     public function getEmptyScore(Request $request)
@@ -131,56 +253,58 @@ class MusicSheetController extends Controller
         $instruments = json_decode($request->input('instruments'));
 //        $instruments = ['Trumpet'];
         if ($instruments !== null) {
-        $result = [];
-        $scoreParts = [];
-        $parts = [];
+            $result = [];
+            $scoreParts = [];
+            $parts = [];
 
-        for ($i = 0; $i < count($instruments); $i++) {
-            $scorePart = ["\$id" => "P" . ($i + 1),
-                "part-name" => $instruments[$i]];
-            $scoreParts = [$scorePart];
+            for ($i = 0; $i < count($instruments); $i++) {
+                $scorePart = ["\$id" => "P" . ($i + 1),
+                    "part-name" => $instruments[$i]];
+                $scoreParts = [$scorePart];
 
-            $key = ['fifths' => '0'];
-            $attributes = ['divisions' => '1', 'key' => $key];
+                $key = ['fifths' => '0'];
+                $attributes = ['divisions' => '1', 'key' => $key];
 
-            $time = ['beats' => "4", 'beat-type' => "4"];
+                $time = ['beats' => "4", 'beat-type' => "4"];
 
-            $clef = ['sign' => "G", 'line' => "2"];
+                $clef = ['sign' => "G", 'line' => "2"];
 
-            $pitch = ['step' => "C", 'octave' => "4"];
-            $note[] = [
-                'pitch' => $pitch,
-                'duration' => "4",
-                'type' => "whole"
-            ];
+                $pitch = ['step' => "C", 'octave' => "4"];
+                $note[] = [
+                    'pitch' => $pitch,
+                    'duration' => "4",
+                    'type' => "whole"
+                ];
 
-            $measure[] = [
-                'number' => '1',
-                'attributes' => $attributes,
-                'time' => $time,
-                'clef' => $clef,
-                'note' => $note
-            ];
+                $measure[] = [
+                    'number' => '1',
+                    'attributes' => $attributes,
+                    'time' => $time,
+                    'clef' => $clef,
+                    'note' => $note
+                ];
 
-            $part = [
-                "\$id" => "P" . ($i + 1),
-                'measure' => $measure
-            ];
+                $part = [
+                    "\$id" => "P" . ($i + 1),
+                    'measure' => $measure
+                ];
 
-            $parts = [
+                $parts = [
 //                ...$parts,
-                $part
+                    $part
+                ];
+
+//                $parts[] = $part;
+            }
+            $partList = ['score-part' => $scoreParts];
+            $scorePartwise = [
+                'part-list' => $partList,
+                'part' => $parts,
+                "version" => '4.0'
             ];
-        }
-        $partList = ['score-part' => $scoreParts];
-        $scorePartwise = [
-            'part-list' => $partList,
-            'part' => $parts,
-            "version" => '4.0'
-        ];
-        $result[] = [
-            'score-partwise' => $scorePartwise
-        ];
+            $result[] = [
+                'score-partwise' => $scorePartwise
+            ];
         }
 
         return response()->json($result);

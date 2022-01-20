@@ -16,6 +16,7 @@
             <div id="create" class="flat-part-left first-hidden mr-4">
                 <h2>Crea nuovo spartito</h2>
                 <form id="createForm" action="{{route('musicsheets.store')}}" method="post" enctype="multipart/form-data" style="width:100%">
+                    @csrf
                     <div class="sheet-info">
                         <label name="title" inline="text">
                             Titolo Spartito

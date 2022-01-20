@@ -85,18 +85,6 @@ class SongController extends Controller
         $radable = $this->getReadableLyrics($rawLyrics);
 //        dd($resultSong);
 
-//        $session = new Session(
-//            '9f22edd2825c42cfb4cdf87dcc0022b0',
-//            'cf2f60097c5d4072a3fca62d9c2991af',
-//        );
-//
-//        $session->requestCredentialsToken();
-//        $accessToken = $session->getAccessToken();
-//
-//        $api = new SpotifyWebAPI();
-//        $api->setAccessToken($accessToken);
-//        dd($api->getTrack('7EjyzZcbLxW7PaaLua9Ksb'));
-
 
         return view('songs.song', [
             'song' => Song::where('id', $id)->first(),

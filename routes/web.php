@@ -27,9 +27,11 @@ Route::get('/dashboard', function () {
 })->middleware(['auth'])->name('dashboard');
 
 Route::middleware('auth')->group(function() {
-    Route::resource('musicsheets', MusicSheetController::class);
     Route::post('musicsheets/filter', [MusicSheetController::class, 'filter'])->name('filter');
     Route::post('musicsheets/getEmptyScore', [MusicSheetController::class, 'getEmptyScore']);
+    Route::get('musicsheets/brani', [MusicSheetController::class, 'searchSong']);
+    Route::post('musicsheets/analyze', [MusicSheetController::class, 'analyzeScore']);
+    Route::resource('musicsheets', MusicSheetController::class);
     Route::resource('songs', SongController::class);
     Route::get('/profilo',[ProfileController::class, 'index']);
     Route::get('/modifica-profilo',[ProfileController::class, 'Modify']);
