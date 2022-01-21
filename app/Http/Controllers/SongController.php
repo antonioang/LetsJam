@@ -75,7 +75,7 @@ class SongController extends Controller
         $GENIUS_EMBED_URL_HEAD = "https://genius.com/songs/";
         $GENIUS_EMBED_URL_TAIL = "/embed.js";
 
-        $authentication = new Bearer('ElbFZLf0xUtpyJ0ZQG9mITS9QcCdH3XzXeVpu3i2BZSQsNep18zxK7HljhtDuS1E');
+        $authentication = new Bearer(env('GENIUS_ACCESS_TOKEN'));
         $genius = new Genius($authentication);
         $result = $genius->getSearchResource()->get('albachiara');
 //        $resultSong= $genius->getSongsResource()->get($result->hits[0]->result->id, 'html');
