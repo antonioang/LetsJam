@@ -50,8 +50,8 @@
                                     <span style="align-self: flex-start; font-weight: 500;">Generi preferiti</span>
                                     @foreach ($genres as $genrePreferred)
                                         <div>
-                                            <input value="{{$genrePreferred->id}}" {{Auth::user()->genre->contains('id', $genrePreferred->id) ? 'checked' : false}} type="checkbox"/>
-                                            <span>{{$genrePreferred->name}}</span>
+                                            <input name="preferredGenres[]" value="{{$genrePreferred->id}}" {{Auth::user()->genre->contains('id', $genrePreferred->id) ? 'checked' : false}} type="checkbox"/>
+                                            <label for="preferredGenres">{{$genrePreferred->name}}</label>
                                         </div>
                                     @endforeach
                                 </div>
@@ -59,8 +59,8 @@
                                     <span style="align-self: flex-start;font-weight: 500;">Strumenti preferiti</span>
                                     @foreach ($instruments as $instrumentPreferred)
                                         <div>
-                                            <input value="{{$instrumentPreferred->id}}" {{Auth::user()->instruments->contains('id', $instrumentPreferred->id) ? 'checked' : false}} type="checkbox"/>
-                                            <span>{{$instrumentPreferred->name}}</span>
+                                            <input name="preferredInstruments[]" value="{{$instrumentPreferred->id}}" {{Auth::user()->instruments->contains('id', $instrumentPreferred->id) ? 'checked' : false}} type="checkbox"/>
+                                            <label for="preferredInstruments">{{$instrumentPreferred->name}}</label>
                                         </div>
                                     @endforeach
                                 </div>

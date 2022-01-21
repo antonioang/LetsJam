@@ -5,23 +5,59 @@ namespace App\Http\Controllers;
 use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\MusicSheet;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class ProfileController extends Controller
 {
-    public function index(Request $request) {
-        return view('profile.profile',[]);
+    public function index(Request $request)
+    {
+        return view('profile.profile', ['sheets' => MusicSheet::where('user_id', Auth::user()->id)->withCount('likes')->get()]);
     }
 
-    public function Modify(Request $request) {
-        return view('profile.modifyProfile',[
-            'genres'=>Genre::all(),
-            'instruments'=>Instrument::all(),
+    public function Modify(Request $request)
+    {
+        return view('profile.modifyProfile', [
+            'genres' => Genre::all(),
+            'instruments' => Instrument::all(),
         ]);
     }
 
-    public function ModifyProfile(Request $request) {
-        dd($request->input('firstname'));
-        return view('profile.modify',[]);
+    public function ModifyProfile(Request $request)
+    {
+        $instruments = Instrument::all();
+        $genres = Genre::all();
+        $user = Auth::user();
+        $userId = $user->id;
+        $loggedUser = User::find($userId);
+        $inputs = $request->all();
+
+        foreach ($instruments as $instrument) {
+            if (!in_array($instrument->id, $inputs['preferredInstruments'])) {
+                $loggedUser->instruments()->detach($instrument->id);
+            } else if (!$loggedUser->instruments->contains($instrument->id)) {
+                $loggedUser->instruments()->attach($instrument->id);
+            }
+        }
+
+        foreach ($genres as $genre) {
+            if (!in_array($genre->id, $inputs['preferredGenres'])) {
+                $loggedUser->genre()->detach($genre->id);
+            } else if (!$loggedUser->genre->contains($genre->id)) {
+                $loggedUser->genre()->attach($genre->id);
+            }
+        }
+
+        $loggedUser->firstname = $inputs['firstname'];
+        $loggedUser->lastname = $inputs['lastname'];
+        $loggedUser->username = $inputs['username'];
+        $loggedUser->email = $inputs['email'];
+
+        $loggedUser->save();
+
+        Auth::setUser($loggedUser->fresh());
+
+        return view('profile.profile', []);
     }
 }

@@ -85,7 +85,7 @@
                         <div class="container">
                             <div class="row">
                                 <div class="col-12 relative">
-                                    @foreach(Auth::user()->musicsheet as $musicSheet)
+                                    @foreach($sheets as $musicSheet)
                                         <div>
                                             @include('fragments.musicSheetCard',$musicSheet)
                                         </div>
