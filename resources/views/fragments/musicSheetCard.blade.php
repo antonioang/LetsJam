@@ -1,4 +1,4 @@
-{{--questo serve a caricare i css solo di questa pagina--}}
+
 @push('extra-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/musicSheetCard.css') }}">
 @endpush

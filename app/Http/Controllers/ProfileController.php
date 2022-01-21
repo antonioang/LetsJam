@@ -34,20 +34,30 @@ class ProfileController extends Controller
         $inputs = $request->all();
 
         foreach ($instruments as $instrument) {
-            if (!in_array($instrument->id, $inputs['preferredInstruments'])) {
+            if (array_key_exists('preferredInstruments',$inputs)) {
+                if (!in_array($instrument->id, $inputs['preferredInstruments'])) {
+                    $loggedUser->instruments()->detach($instrument->id);
+                } else if (!$loggedUser->instruments->contains($instrument->id)) {
+                    $loggedUser->instruments()->attach($instrument->id);
+                }
+            } else {
                 $loggedUser->instruments()->detach($instrument->id);
-            } else if (!$loggedUser->instruments->contains($instrument->id)) {
-                $loggedUser->instruments()->attach($instrument->id);
             }
         }
 
         foreach ($genres as $genre) {
-            if (!in_array($genre->id, $inputs['preferredGenres'])) {
+            if (array_key_exists('preferredGenres',$inputs)) {
+                if (!in_array($genre->id, $inputs['preferredGenres'])) {
+                    $loggedUser->genre()->detach($genre->id);
+                } else if (!$loggedUser->genre->contains($genre->id)) {
+                    $loggedUser->genre()->attach($genre->id);
+                }
+            } else {
                 $loggedUser->genre()->detach($genre->id);
-            } else if (!$loggedUser->genre->contains($genre->id)) {
-                $loggedUser->genre()->attach($genre->id);
             }
         }
+
+
 
         $loggedUser->firstname = $inputs['firstname'];
         $loggedUser->lastname = $inputs['lastname'];
@@ -58,6 +68,6 @@ class ProfileController extends Controller
 
         Auth::setUser($loggedUser->fresh());
 
-        return view('profile.profile', []);
+        return view('profile.profile', ['sheets' => MusicSheet::where('user_id', Auth::user()->id)->withCount('likes')->get()]);
     }
 }
