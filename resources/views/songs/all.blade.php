@@ -13,7 +13,8 @@
     <section class="hero-area">
         <div class="row">
             <div class="sidebar">
-                <form th:action="@{/songs/}" th:object="${formData}" method="post" id="sidebar-form">
+                <form action="{{route('filterSongs')}}" method="post" id="sidebar-form">
+                    @csrf
                     <div class="search mb-5">
                         @include('fragments.icons.search')
                         <input type="text" placeholder="Cerca">
@@ -31,7 +32,7 @@
                         <div class="sub-option-container">
                             @foreach ($genres as $genre)
                                 <div class="checkbox-option">
-                                    <input type="checkbox" class="form-check-input" value="{{$genre->name}}">
+                                    <input type="checkbox" class="form-check-input" {{in_array($genre->id,$checkedGenres) ? 'checked' : false}} name="genre[]   " value="{{$genre->id}}">
                                     <p style="text-transform: capitalize;">{{$genre->name}}</p>
                                 </div>
                             @endforeach
@@ -43,38 +44,35 @@
                             <div class="option-icon">
                                 @include('fragments.icons.sort')
                             </div>
-                            <h4 style="color: white;">Ordina per</h4>
+                            <h4 style="color: white;"> Ordina per</h4>
                             <div class="option-icon sort-direction">
-{{--                                <div th:if="${formData.sortDirection == 'ASC'}" th:remove="tag">--}}
+                                @if($sortDirection == 'ASC')
                                     @include('fragments.icons.sort-asc')
-{{--                                </div>--}}
-{{--                                <div th:if="${formData.sortDirection == 'DESC'}" th:remove="tag">--}}
-{{--                                    <svg th:replace="fragments/icons :: sort-desc"></svg>--}}
-{{--                                </div>--}}
-{{--                                <input th:if="${formData.sortDirection == 'ASC'}" type="text" name="sortDirection" value="ASC" hidden>--}}
-{{--                                <input th:if="${formData.sortDirection == 'DESC'}" type="text" name="sortDirection" value="DESC" hidden>--}}
+                                    <input type="text" name="sortDirection" value="ASC" hidden>
+                                @endif
+                                @if($sortDirection == 'DESC')
+                                    @include('fragments.icons.sort-desc')
+                                    <input  type="text" name="sortDirection" value="DESC" hidden>
+                                @endif
                             </div>
                         </div>
 
                         <div class="sub-option-container">
                             <div class="radio-option">
-            {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}" value="title">--}}
-                                <input type="radio" class="form-check-input" value="title">
+                                <input type="radio" name="order" class="form-check-input" {{$sortOrderr == 'title' ? 'checked' : false}} value="title">
                                 <p>Titolo</p>
                             </div>
                             <div class="radio-option">
-            {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}" value="song.title">--}}
-                                <input type="radio" class="form-check-input"  value="song.title">
+                                <input type="radio" name="order" class="form-check-input" {{$sortOrderr == 'songName' ? 'checked' : false}} value="songName">
                                 <p>Nome brano</p>
                             </div>
                             <div class="radio-option">
-            {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}"--}}
-                                <input type="radio" class="form-check-input"
-                                       value="createDateTime">
+                                <input type="radio" name="order" {{$sortOrderr == 'created_at' ? 'checked' : false}} class="form-check-input"
+                                       value="created_at">
                                 <p>Data di creazione</p>
                             </div>
                             <div class="radio-option">
-                                <input type="radio" class="form-check-input" value="duration">
+                                <input type="radio" name="order" {{$sortOrderr == 'duration' ? 'checked' : false}} class="form-check-input" value="duration">
                                 <p>Durata</p>
                             </div>
                         </div>
@@ -90,15 +88,15 @@
 
                         <div class="sub-option-container">
                             <div class="radio-option">
-                                <input type="radio" class="form-check-input" th:field="*{albumType}" value="ALBUM">
+                                <input type="radio" name="album_type" class="form-check-input" value="ALBUM">
                                 <p>Album</p>
                             </div>
                             <div class="radio-option">
-                                <input type="radio" class="form-check-input" th:field="*{albumType}" value="SINGLE">
+                                <input type="radio" name="album_type" class="form-check-input" value="SINGLE">
                                 <p>Single</p>
                             </div>
                             <div class="radio-option">
-                                <input type="radio" class="form-check-input" th:field="*{albumType}" value="COLLECTION">
+                                <input type="radio" name="album_type" class="form-check-input" value="COLLECTION">
                                 <p>Collection</p>
                             </div>
                         </div>
@@ -114,16 +112,14 @@
 
                         <div class="sub-option-container">
                             <div class="checkbox-option">
-{{--                                <input type="checkbox" class="form-check-input" th:field="*{explicit}">--}}
-                                <input type="checkbox" class="form-check-input">
+                                <input value="explicit" name="filter[]" type="checkbox" class="form-check-input">
                                 <p>Contiene contenuti espliciti</p>
                             </div>
                         </div>
 
                         <div class="sub-option-container">
                             <div class="checkbox-option">
-{{--                                <input type="checkbox" class="form-check-input" th:field="*{lyrics}">--}}
-                                <input type="checkbox" class="form-check-input">
+                                <input value="hasText" name="filter[]" type="checkbox" class="form-check-input">
                                 <p>Testo disponibile</p>
                             </div>
                         </div>

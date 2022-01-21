@@ -80,23 +80,19 @@
 
                             <div class="sub-option-container">
                                 <div class="radio-option">
-    {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}" value="title">--}}
                                     <input type="radio" name="order" class="form-check-input" {{$sortOrderr == 'title' ? 'checked' : false}} value="title">
                                     <p>Titolo</p>
                                 </div>
                                 <div class="radio-option">
-    {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}" value="song.title">--}}
                                     <input type="radio" name="order" class="form-check-input" {{$sortOrderr == 'songName' ? 'checked' : false}} value="songName">
                                     <p>Nome brano</p>
                                 </div>
                                 <div class="radio-option">
-    {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}"--}}
                                     <input type="radio" name="order" {{$sortOrderr == 'created_at' ? 'checked' : false}} class="form-check-input"
                                            value="created_at">
                                     <p>Data di creazione</p>
                                 </div>
                                 <div class="radio-option">
-    {{--                                <input type="radio" class="form-check-input" th:field="*{sortBy}" value="likes.size">--}}
                                     <input type="radio" name="order" {{$sortOrderr == 'likes' ? 'checked' : false}} class="form-check-input" value="likes">
                                     <p>Mi piace</p>
                                 </div>

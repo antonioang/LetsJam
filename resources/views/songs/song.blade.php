@@ -22,21 +22,21 @@
                             <i></i>
                         </div>
                         <span class="label mr-2">Album: </span>
-                        @if($song->albumName != null)
-                            <p>{{$song->albumName}}</p>
+                        @if($song->album_name != null)
+                            <p>{{$song->album_name}}</p>
                         @endif
-                        @unless($song->albumName != null)
+                        @unless($song->album_name != null)
                             <p>Not specified</p>
                         @endunless
                     </div>
-                    @if($song->albumType != null)
+                    @if($song->album_type != null)
                         <div class="d-flex align-items-center mt-4 song-info">
                             <div class="icon mr-2">
                                 @include('fragments.icons.album-type')
                                 <i></i>
                             </div>
                             <span class="label mr-2">Tipo di Album:</span>
-                            <p style="text-transform:capitalize"> {{strtolower($song->albumType)}}</p>
+                            <p style="text-transform:capitalize"> {{strtolower($song->album_type)}}</p>
                         </div>
                     @endif
                     @if($song->duration != null)
@@ -46,20 +46,24 @@
                                 <i></i>
                             </div>
                             <span class="label mr-2">Durata</span>
-                            <p inline="text">[[${(song.duration/1000)/60}]] [[#{common.minutes}]] [[${(song.duration/1000)%60}]] [[#{common.seconds}]]</p>
+                            <p inline="text">{{floor(($song->duration/1000)/60)}} minuti {{($song->duration/1000)%60}} secondi</p>
                         </div>
                     @endif
-                    @if($song->spotifyId != null)
+                    @if($song->spotify_id != null)
                         <iframe title="spotify-player"
-                                src="'https://open.spotify.com/embed/track/'.{{$song->spotifyId}}"
+                                src="https://open.spotify.com/embed/track/{{$song->spotify_id}}"
                                 height="80" allow="encrypted-media" class="spotify-player mt-4">
                         </iframe>
                     @endif
                 </div>
-{{--                <div class="col-5 pt-5 text-center">--}}
-{{--                    <img th:if="${song.imageUrl != null}" th:src="${song.imageUrl}" alt="song image cover" class="song-image">--}}
-{{--                    <img th:unless="${song.imageUrl != null}" th:src="@{/img/nocover.jpg}" alt="song image cover" class="song-image">--}}
-{{--                </div>--}}
+                <div class="col-5 pt-5 text-center">
+                    @if($song->image_url)
+                    <img src="{{asset($song->image_url)}}" alt="song image cover" class="song-image">
+                    @endif
+                    @unless($song->image_url)
+                    <img src="{{asset('/img/nocover.jpg')}}" alt="song image cover" class="song-image">
+                    @endunless
+                </div>
             </div>
             <div class="row">
                 <div class="col-12 mt-4 pt-4 pb-4">

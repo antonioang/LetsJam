@@ -33,6 +33,7 @@ Route::middleware('auth')->group(function() {
     Route::post('musicsheets/analyze', [MusicSheetController::class, 'analyzeScore']);
     Route::resource('musicsheets', MusicSheetController::class);
     Route::resource('songs', SongController::class);
+    Route::post('songs/filter', [SongController::class, 'filter'])->name('filterSongs');
     Route::get('/profilo',[ProfileController::class, 'index']);
     Route::get('/modifica-profilo',[ProfileController::class, 'Modify']);
     Route::post('/modifica-profilo',[ProfileController::class, 'ModifyProfile']);

@@ -20,9 +20,12 @@ class SongController extends Controller
     public function index()
     {
         return view('songs.all', [
+            'checkedGenres' => [],
             'genres' => Genre::all(),
             'instruments' => Instrument::all(),
-            'songs' => Song::paginate(5)
+            'songs' => Song::paginate(5),
+            'sortDirection' => 'ASC',
+            'sortOrderr' => '',
         ]);
     }
 
@@ -89,6 +92,32 @@ class SongController extends Controller
         return view('songs.song', [
             'song' => Song::where('id', $id)->first(),
             'readable' => $radable,
+        ]);
+    }
+
+    public function filter(Request $request)
+    {
+        $checkedGenres = $request->input('genre') ? $request->input('genre') : [];
+        $sortOrder = $request->input('order') ? $request->input('order') : '';
+        $sortDirection = $request->input('sortDirection') ? $request->input('sortDirection') : '';
+        $filters = $request->input('filter') ? $request->input('filter') : '';
+        $albumType = $request->input('album_type') ? $request->input('album_type') : '';
+
+        $songs = Song::whereIn('genre_id', $checkedGenres)
+            ->when($sortOrder, function ($query) use ($sortOrder, $sortDirection) {
+                $query->orderBy($sortOrder, $sortDirection);
+            })->when($filters, function ($query) use ($sortOrder, $sortDirection) {
+                $query->whereIn('',);
+            })->paginate(5);
+
+
+        return view('songs.all', [
+            'checkedGenres' => $checkedGenres,
+            'genres' => Genre::all(),
+            'sortDirection' => $sortDirection,
+            'instruments' => Instrument::all(),
+            'sortOrderr' => $sortOrder,
+            'songs' => $songs,
         ]);
     }
 

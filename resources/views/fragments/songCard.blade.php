@@ -1,20 +1,20 @@
 <div onclick="goToSong({{$song->id}})">
     <div class="song-card mb-4 fadeInRight">
-        @if($song->imageUrl)
-            <img src="{{asset($song->imageUrl)}}" alt="song image cover" class="song-image">
+        @if($song->image_url)
+            <img src="{{asset($song->image_url)}}" alt="song image cover" class="song-image">
         @endif
         <div class="song-info-container">
             @if($song->title)
                 <h3>{{$song->title}}</h3>
             @endif
-            @if($song->albumName)
+            @if($song->album_name)
                     <div class="d-flex align-items-center mt-1 song-info">
                         <div class="icon mr-2">
                             @include('fragments.icons.album')
                             <i></i>
                         </div>
                         <span class="label mr-2">Album: </span>
-                        <p>{{$song->albumName}}</p>
+                        <p>{{$song->album_name}}</p>
                     </div>
             @endif
             @if($song->author)
