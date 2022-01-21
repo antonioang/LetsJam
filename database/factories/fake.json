@@ -1,0 +1,188 @@
+{
+	"score-partwise": {
+		"part-list": {
+			"score-part": [
+				{
+					"$id": "P1",
+					"part-name": "Trumpet",
+					"score-instrument": {
+						"instrument-name": "Violin",
+						"instrument-abbreviation": "Vln.",
+						"$id": "P1-I1"
+					},
+					"midi-instrument": {
+						"midi-program": "41",
+						"$id": "P1-I1",
+						"midi-channel": "1"
+					},
+					"uuid": "1bd163ae-a722-3178-4566-ccca5cbd630f",
+					"voiceMapping": {
+						"0": [
+							0
+						]
+					},
+					"staffMapping": [
+						{
+							"voices": [
+								0
+							],
+							"mainVoiceIdx": 0,
+							"staffUuid": "2aaf1823-30f7-2345-1308-e15545eb370f"
+						}
+					],
+					"voiceIdxToUuidMapping": {
+						"0": "c06d609f-1c15-51fb-2bef-af74106a742d"
+					},
+					"voiceUuidToIdxMapping": {
+						"c06d609f-1c15-51fb-2bef-af74106a742d": 0
+					}
+				}
+			]
+		},
+		"part": [
+			{
+				"$id": "P1",
+				"measure": [
+					{
+						"number": "1",
+						"time": {
+							"beats": "4",
+							"beat-type": "4"
+						},
+						"clef": {
+							"sign": "G",
+							"line": "2"
+						},
+						"note": [
+							{
+								"pitch": {
+									"step": "C",
+									"octave": "4"
+								},
+								"duration": "4",
+								"type": "whole",
+								"$adagio-location": {
+									"dpq": 1,
+									"timePos": 0
+								},
+								"staff": "1"
+							}
+						],
+						"attributes": [
+							{
+								"divisions": "1",
+								"time": {
+									"beats": "4",
+									"beat-type": "4"
+								},
+								"clef": {
+									"sign": "G",
+									"line": "2"
+								},
+								"key": {
+									"fifths": "0"
+								},
+								"staff-details": {
+									"staff-lines": "5"
+								},
+								"$adagio-time": {
+									"beats": "4",
+									"beat-type": "4"
+								},
+								"noteBefore": -1,
+								"$adagio-location": {
+									"timePos": 0,
+									"dpq": 1
+								}
+							}
+						],
+						"harmony": [],
+						"sound": [
+							{
+								"$adagio-swing": {
+									"swing": false
+								},
+								"noteBefore": -1,
+								"$adagio-location": {
+									"timePos": 0,
+									"dpq": 1
+								}
+							},
+							{
+								"$tempo": "80",
+								"noteBefore": -1,
+								"$adagio-location": {
+									"timePos": 0,
+									"dpq": 1
+								}
+							}
+						],
+						"direction": [
+							{
+								"$placement": "above",
+								"staff": "1",
+								"$adagio-location": {
+									"timePos": 0
+								},
+								"direction-type": {
+									"metronome": {
+										"per-minute": "80",
+										"beat-unit": "quarter"
+									}
+								},
+								"noteBefore": -1,
+								"$adagio-isFirst": true
+							}
+						],
+						"$adagio-beatsList": [
+							1,
+							1,
+							1,
+							1
+						],
+						"$number": "1"
+					}
+				],
+				"uuid": "1bd163ae-a722-3178-4566-ccca5cbd630f"
+			}
+		],
+		"version": "4.0",
+		"defaults": {
+			"scaling": {
+				"millimeters": "7",
+				"tenths": "40"
+			},
+			"page-layout": {
+				"page-height": "1596.5714285714287",
+				"page-width": "1233.7142857142858",
+				"page-margins": {
+					"$type": "both",
+					"top-margin": "72.57142857142857",
+					"bottom-margin": "72.57142857142857",
+					"left-margin": "72.57142857142857",
+					"right-margin": "72.57142857142857"
+				}
+			},
+			"system-layout": {
+				"system-distance": "115.2"
+			},
+			"staff-layout": {
+				"staff-distance": "72.57142857142857"
+			},
+			"$adagio-systemBreakPolicy": {
+				"maxNbMeasuresPerLine": 4,
+				"forbiddenCounts": {}
+			}
+		},
+		"credit": [],
+		"measure-list": {
+			"score-measure": [
+				{
+					"uuid": "b058aee3-ed8b-cd5f-cc49-c180b03677e5"
+				}
+			]
+		},
+		"$adagio-formatVersion": 48,
+		"$version": "3.1"
+	}
+}

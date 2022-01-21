@@ -13,9 +13,28 @@ class GenreFactory extends Factory
      */
     public function definition()
     {
+        $genres = [
+            "Rock'n'roll",
+            "Classica",
+            "Rock",
+            "jazz",
+            "Rap",
+            "Hardcore",
+            "Metal",
+            "Hip hop",
+            "Blues",
+            "House",
+            "Elettronica",
+            "Pop",
+            "British pop",
+            "rhythm and blues",
+            "Boogie-woogie",
+            "R&B",
+            "Soul",
+            "Funk"];
         return [
-            'name' => $this->faker->name(),
-            'description' => $this->faker->name(),
+            'name' => $this->faker->randomElement($genres),
+            'description'=> $this->faker->text(),
         ];
     }
 }

@@ -33,7 +33,7 @@ class InstrumentFactory extends Factory
             "Clarinet",
             "Drum"];
         return [
-            'name' => $instruments[rand(1,18)],
+            'name' => $this->faker->randomElement($instruments),
             'instrument_key'=> $this->faker->title(),
         ];
     }

@@ -23,7 +23,7 @@ class CreateSongsTable extends Migration
             $table->string('image_url');
             $table->boolean('is_explicit');
             $table->Integer('duration');
-            $table->string('lyrics');
+            $table->mediumText('lyrics');
             $table->string('spotify_id');
             $table->bigInteger('genre_id')->unsigned();
             $table->foreign('genre_id')->references('id')->on('genres');

@@ -162,19 +162,15 @@
                             <p class="wow fadeInUp" data-wow-delay=".6s">Esplora le canzoni e gli spartiti secondo i filtri che preferisci. Generi, popolarità e tanto altro a disposizione.</p>
                         </div>
 
-                        @foreach ($mostpopular as $musicSheet)
-                            <p>This is user {{ $musicSheet->id }}</p>
-                            {{--                        <div th:replace="fragments/musicSheetCard :: musicSheetCard(musicsheet = ${musicsheet})"></div>--}}
+                        @foreach($sheetsForGenres as $key => $sheet)
+                            @if(!$sheet->isEmpty())
+                                <h3 class="wow fadeInUp genreTitle mt-5 mb-3" data-wow-delay=".4s">{{$key}}</h3>
+                                @foreach ($sheet as $musicSheet)
+                                    @include('fragments.musicSheetCard',$musicSheet)
+                                @endforeach
+                            @endif
                         @endforeach
 
-{{--                        <div th:each="musicsheetGenreList : ${musicSheetByGenre}">--}}
-{{--                            <div th:if="${musicsheetGenreList.size > 0}" th:remove="tag">--}}
-{{--                                <h3 class="wow fadeInUp genreTitle mt-5 mb-3" data-wow-delay=".4s" th:text="${musicsheetGenreList[0].song.getGenre().getName()}"></h3>--}}
-{{--                                <div th:each="musicsheet : ${musicsheetGenreList}">--}}
-{{--                                    <div th:replace="fragments/musicSheetCard :: musicSheetCard(musicsheet = ${musicsheet})"></div>--}}
-{{--                                </div>--}}
-{{--                            </div>--}}
-{{--                        </div>--}}
                         <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s" src="{{asset('img/service-patern.png')}}" alt="#"
                              style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;top: 287px;right: -25px;">
                         <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s" src="{{asset('img/service-patern.png')}}" alt="#"

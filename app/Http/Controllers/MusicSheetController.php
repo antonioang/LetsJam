@@ -188,6 +188,7 @@ class MusicSheetController extends Controller
         if (!$dbSongs->isEmpty()) {
             foreach ($dbSongs as $song) {
                 foreach ($spotifySongs as $spotySong) {
+//                    dd($spotySong);
                     if ($song->spotify_id == $spotySong->id) {
                         $toRemove[] = array_search($spotySong, $spotifySongs);
                     }
@@ -231,8 +232,8 @@ class MusicSheetController extends Controller
     private function searchSpotifySongs($param)
     {
         $session = new Session(
-            '9f22edd2825c42cfb4cdf87dcc0022b0',
-            'cf2f60097c5d4072a3fca62d9c2991af',
+            env('SPOTY_CLIENT_ID'),
+            env('SPOTY_CLIENT_SECRET'),
         );
 
         $session->requestCredentialsToken();
