@@ -5,7 +5,7 @@ document.addEventListener("DOMContentLoaded", () => {
     height: "1000px",
     embedParams: {
       mode: "view",
-      // appId: "59e7684b476cba39490801c2",
+      appId: "59e7684b476cba39490801c2",
       branding: false,
       controlsDisplay: true,
       controlsPanel: false,
@@ -17,6 +17,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
   let data = JSON.parse(musicSheetData.content);
   editor.loadJSON(data);
+
+    console.log(data)
 
   document.querySelectorAll(".instrument").forEach((i) => {
     i.addEventListener("click", async () => {

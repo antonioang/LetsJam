@@ -4,17 +4,19 @@ namespace App\Http\Controllers;
 
 use App\Models\Instrument;
 use App\Models\Song;
+use App\Services\Utility\Utils;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\MusicSheet;
-use Illuminate\Support\Facades\Auth;
-use mysql_xdevapi\Exception;
 use PhpParser\Node\Expr\Cast\Object_;
-use SpotifyWebAPI\Session;
-use SpotifyWebAPI\SpotifyWebAPI;
 
 class MusicSheetController extends Controller
 {
+    public function __construct(Utils $utils)
+    {
+        $this->utils = $utils;
+    }
+
     //get all
     public function index()
     {
@@ -29,41 +31,75 @@ class MusicSheetController extends Controller
         ]);
     }
 
-    /**
-     * Show the form for creating a new resource.
-     *
-     */
     //createUpload
     public function create()
     {
         return view('musicsheets.createUpload', [
             'genre' => Genre::all(),
-            'instruments' => Instrument::all()
+            'instruments' => Instrument::all(),
+            'songType' => 0,
         ]);
     }
 
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @return \Illuminate\Http\Response
-     */
     public function store(Request $request)
     {
-        $jsonBrano = $request->input('brano');
-        $brano = json_decode($jsonBrano);
+
+        $jsonBrano = $request->input('content');
+        $brano = $request->input('brano');
+        $SongType = $request->input('songType');
+        $title = $request->input('title');
+        $author = $request->input('author');
+        $genre = $request->input('songGenre');
+
         $musicSheet = new MusicSheet;
-        $musicSheet->title = 'Me';
-        $musicSheet->author = 'me@yahoo.com';
+        $musicSheet->title = $title;
+        $musicSheet->author = $author;
         $musicSheet->verified = 1;
         $musicSheet->visibility = 1;
         $musicSheet->rearranged = 1;
-        $musicSheet->music_sheet_data = $request->input('content');
-        $musicSheet->song_id = 1;
-        $musicSheet->has_tablature = 0;
+        $musicSheet->music_sheet_data = $jsonBrano;
+        $musicSheet->has_tablature = $this->hasTab($jsonBrano);
         $musicSheet->user_id = auth()->user()->id;
         // add more fields (all fields that users table contains without id)
+        $temp = $this->extractInstruments($jsonBrano);
+//        dd($temp[0]);
+        $instruments = $temp[0];
+
+        $song = new Song;
+        if (!$SongType) {
+            $brano = json_decode($brano, true);
+
+            $songId = $brano['songId'];
+            $spotyId = $brano['spotifyId'];
+
+            if ($songId != 'null') {
+                $song = Song::find($songId);
+            } else {
+                $song = $this->utils->searchSpotifySongsById($spotyId);
+            }
+        } else {
+            $song->title = $title;
+            $song->author = $author;
+            $song->album_name = 'non definito';
+            $song->album_type = 'non definito';
+            $song->image_url = '';
+            $song->is_explicit = 0;
+            $song->duration = 0;
+            $song->lyrics = 'non definita';
+            $song->spotify_id = 0;
+        }
+
+        $song->genre_id = $genre;
+        $song->save();
+
+//        dd($song->fresh()->id);
+        $musicSheet->song_id = $song->fresh()->id;
+
         $musicSheet->save();
+        $musicSheet->instruments()->saveMany($instruments);
+
+
+
         dd(
             $request->input('title'),
             $request->input('author'),
@@ -78,6 +114,84 @@ class MusicSheetController extends Controller
             $request->input('visibility'),
             $request->input('musicSheetVisibility'),
         );
+    }
+
+    //show one musicsheet
+    public function show(int $id)
+    {
+
+        $sheet = MusicSheet::where('id', $id)->withCount('likes')->first();
+
+//        $sheet_content = json_decode($sheet->music_sheet_data, true);
+
+//        dd($sheet_content['score-partwise']['part-list']['score-part']);
+
+        $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
+        $mappping = [];
+
+        foreach ($instrumentMapping[0] as $key => $ins) {
+            $mappping[$ins->name] = $instrumentMapping[1][$key];
+        }
+
+        dd($mappping);
+
+        $musicsheetdata = (object)[
+            'id' => $sheet->id,
+            'content' => $sheet->music_sheet_data,
+            'instrumentMapping' => $instrumentMapping
+        ];
+//        dd(MusicSheet::where('id', $id)->first());
+        return view('musicsheets.musicSheet', [
+            'musicSheet' => $sheet,
+            'musicsheetdata' => $musicsheetdata,
+        ]);
+    }
+
+    public function edit($id)
+    {
+        //
+    }
+
+    public function update(Request $request, $id)
+    {
+        //
+    }
+
+    public function destroy($id)
+    {
+        //
+    }
+
+    private function extractInstrumentPart() {
+
+    }
+
+    private function hasTab($score)
+    {
+        return strpos('fret', $score);
+    }
+
+    private function extractInstruments($score): array
+    {
+        $parts = json_decode($score, true);
+//        dd($parts);
+        $parts = $parts['score-partwise']['part-list']['score-part'];
+        $scoreInstruments = [];
+        $instruments = [];
+        $partIds = [];
+
+        foreach ($parts as $item) {
+            $scoreInstruments[] = $item['score-instrument'];
+        }
+
+        foreach ($scoreInstruments as $scoreIntrument) {
+            $instruments[] = Instrument::where('name', $scoreIntrument['instrument-name'])->first();
+            $fullId = $scoreIntrument["\$id"];
+            $idParts = explode('-', $fullId);
+            $partIds[] =  $idParts[0];
+        }
+
+        return [$instruments,$partIds];
     }
 
     public function analyzeScore(Request $request)
@@ -98,54 +212,6 @@ class MusicSheetController extends Controller
             'title' => $title,
             'author' => $author
         ]);
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param int $id
-     */
-    //show one musicsheet
-    public function show(int $id)
-    {
-//        dd(MusicSheet::where('id', $id)->first());
-        return view('musicsheets.musicSheet', [
-            'musicSheet' => MusicSheet::where('id', $id)->first()
-        ]);
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function edit($id)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param \Illuminate\Http\Request $request
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, $id)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param int $id
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy($id)
-    {
-        //
     }
 
     public function filter(Request $request)
@@ -183,7 +249,7 @@ class MusicSheetController extends Controller
 
         $dbSongs = Song::where('title', 'LIKE', '%' . $songToSearch . '%')
             ->orWhere('author', 'LIKE', '%' . $songToSearch . '%')->get();
-        $spotifySongs = $this->searchSpotifySongs($songToSearch);
+        $spotifySongs = $this->utils->searchSpotifySongs($songToSearch);
 
         if (!$dbSongs->isEmpty()) {
             foreach ($dbSongs as $song) {
@@ -229,30 +295,9 @@ class MusicSheetController extends Controller
         return response()->json($result);
     }
 
-    private function searchSpotifySongs($param)
-    {
-        $session = new Session(
-            env('SPOTY_CLIENT_ID'),
-            env('SPOTY_CLIENT_SECRET'),
-        );
-
-        $session->requestCredentialsToken();
-        $accessToken = $session->getAccessToken();
-
-        $api = new SpotifyWebAPI();
-        $api->setAccessToken($accessToken);
-        $result = $api->search($param, 'track', ['limit' => 5]);
-        if ($result) {
-            return $result->tracks->items;
-        } else {
-            return null;
-        }
-    }
-
     public function getEmptyScore(Request $request)
     {
         $instruments = json_decode($request->input('instruments'));
-//        $instruments = ['Trumpet'];
         if ($instruments !== null) {
             $result = [];
             $scoreParts = [];
@@ -261,7 +306,7 @@ class MusicSheetController extends Controller
             for ($i = 0; $i < count($instruments); $i++) {
                 $scorePart = ["\$id" => "P" . ($i + 1),
                     "part-name" => $instruments[$i]];
-                $scoreParts = [$scorePart];
+                $scoreParts[] = $scorePart;
 
                 $key = ['fifths' => '0'];
                 $attributes = ['divisions' => '1', 'key' => $key];
@@ -290,12 +335,7 @@ class MusicSheetController extends Controller
                     'measure' => $measure
                 ];
 
-                $parts = [
-//                ...$parts,
-                    $part
-                ];
-
-//                $parts[] = $part;
+                $parts[] = $part;
             }
             $partList = ['score-part' => $scoreParts];
             $scorePartwise = [
@@ -309,6 +349,5 @@ class MusicSheetController extends Controller
         }
 
         return response()->json($result);
-//        return json_encode($result);
     }
 }

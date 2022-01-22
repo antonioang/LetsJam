@@ -7,7 +7,7 @@
 @push('extra-js')
     <script>
         /*<![CDATA[*/
-        {{--var musicSheetData = {{Js::from($musicSheet->musicsheetdata)}};--}}
+        var musicSheetData = {{Js::from($musicsheetdata)}};
         var musicSheetTitle = {{Js::from($musicSheet->title)}};
         var loggedUser = {{ Js::from(Auth::user()) }};
         var isAuthor = loggedUser === {{Js::from($musicSheet->user())}};
@@ -64,7 +64,7 @@
                                 @include('fragments.icons.like')
                                 <i></i>
                             </div>
-                            <span> {{$musicSheet->likes}} </span>
+                            <span> {{$musicSheet->likes_count}} </span>
                             Mi piace
                         </div>
                         @if($musicSheet->verified)
@@ -100,11 +100,12 @@
                         <div class="editor-container p-4">
                             <h3 class="mt-4 mb-3">Strumenti</h3>
                             <div class="instruments-container mb-4">
-{{--                                @foreach ($genres as $genre)--}}
-{{--                                    <div class="instrument" th:each="key : ${musicSheetData.instrumentMapping.keySet()}" th:partId="${musicSheetData.instrumentMapping.get(key)}">--}}
-{{--                                        <svg th:replace="fragments/icons :: __${key.toLowerCase()}__"></svg>--}}
+                                @foreach ($musicsheetdata->instrumentMapping as $key => $instrument)
+                                    {{$instrument}}
+{{--                                    <div class="instrument" partId="{{$instrument[$key]}}">--}}
+{{--                                        @include('fragments.icons.'.$instrument)--}}
 {{--                                    </div>--}}
-{{--                                @endforeach--}}
+                                @endforeach
                             </div>
                             <div id="embed" class="w-100"></div>
                             <h3 class="mt-4 mb-3" >Download</h3>

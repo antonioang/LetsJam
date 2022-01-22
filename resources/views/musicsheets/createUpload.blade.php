@@ -74,7 +74,7 @@
                         <!-- hidden fields-->
                         <input id="selectedSong" name="brano" type="hidden"/>
                         <input id="musicSheetContent" name="content" type="hidden"/>
-                        <input id="songType" name="songType" type="hidden" />
+                        <input id="songType" name="songType" type="hidden" value="{{$songType}}" />
                         <input id="visibility" name="visibility" type="hidden" />
                         <!-- -->
 
