@@ -47,6 +47,9 @@ document.addEventListener("DOMContentLoaded", () => {
       formData.append("partList", JSON.stringify(partList));
       formData.append("musicSheetId", musicSheetData.id);
       return await fetch("/musicsheets/getScoreWithOnlyParts", {
+          headers: {
+              'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
+          },
         method: "POST",
         ContentType: "multipart/form-data",
         processData: false,

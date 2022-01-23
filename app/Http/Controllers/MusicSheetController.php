@@ -119,6 +119,8 @@ class MusicSheetController extends Controller
     //show one musicsheet
     public function show(int $id)
     {
+        $available_instruments= ["Piano", "Organ", "Violin", "Cello", "Contrabass", "BassAcoustic", "BassElectric",
+            "Guitar", "Banjo", "Sax", "Trumpet", "Horn", "Trombone", "Tuba", "Flute", "Oboe", "Clarinet", "Drum"];
 
         $sheet = MusicSheet::where('id', $id)->withCount('likes')->first();
 
@@ -127,18 +129,18 @@ class MusicSheetController extends Controller
 //        dd($sheet_content['score-partwise']['part-list']['score-part']);
 
         $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
-        $mappping = [];
+        $mapping = [];
 
         foreach ($instrumentMapping[0] as $key => $ins) {
-            $mappping[$ins->name] = $instrumentMapping[1][$key];
+            $mapping[$ins->name] = $instrumentMapping[1][$key];
         }
 
-        dd($mappping);
+//        dd($mappping);
 
         $musicsheetdata = (object)[
             'id' => $sheet->id,
             'content' => $sheet->music_sheet_data,
-            'instrumentMapping' => $instrumentMapping
+            'instrumentMapping' => $mapping
         ];
 //        dd(MusicSheet::where('id', $id)->first());
         return view('musicsheets.musicSheet', [
@@ -162,8 +164,38 @@ class MusicSheetController extends Controller
         //
     }
 
-    private function extractInstrumentPart() {
+    public function extractInstrumentPart(Request $request) {
+        $msicSheetId = $request->input('musicSheetId');
+        $json = MusicSheet::find($msicSheetId);
+        $partListIdJson = $request->input('partList');
+        $partListId = json_decode($partListIdJson);
 
+        $score = json_decode($json->music_sheet_data, true);
+        $parts = $score['score-partwise']['part'];
+        $partToExtract = [];
+
+        foreach ($parts as $part) {
+            $currentId = $part["\$id"];
+            if (in_array($currentId, $partListId)) {
+                $partToExtract[] = $part;
+            }
+        }
+        unset($score['score-partwise']['part']);
+        $score['score-partwise']['part'] = $partToExtract;
+
+        $partList = $score['score-partwise']['part-list']['score-part'];
+        $scorePartToExtract = [];
+
+        foreach($partList as $part) {
+            $currentId = $part["\$id"];
+            if (in_array($currentId, $partListId)) {
+                $scorePartToExtract[] = $part;
+            }
+        }
+        unset($score['score-partwise']['part-list']['score-part']);
+        $score['score-partwise']['part-list']['score-part'] = $scorePartToExtract;
+
+        return response()->json($score);
     }
 
     private function hasTab($score)
@@ -181,15 +213,18 @@ class MusicSheetController extends Controller
         $partIds = [];
 
         foreach ($parts as $item) {
-            $scoreInstruments[] = $item['score-instrument'];
+            $instruments[] = Instrument::where('name', $item['part-name'])->first();
+            $fullId = $item["\$id"];
+//            $idParts = explode('-', $fullId);
+            $partIds[] =  $fullId;
         }
 
-        foreach ($scoreInstruments as $scoreIntrument) {
-            $instruments[] = Instrument::where('name', $scoreIntrument['instrument-name'])->first();
-            $fullId = $scoreIntrument["\$id"];
-            $idParts = explode('-', $fullId);
-            $partIds[] =  $idParts[0];
-        }
+//        foreach ($scoreInstruments as $key => $scoreIntrument) {
+//            $instruments[] = Instrument::where('name', $scoreIntrument['instrument-name'])->first();
+//            $fullId = $scoreIntrument["\$id"];
+//            $idParts = explode('-', $fullId);
+//            $partIds[] =  $idParts[0];
+//        }
 
         return [$instruments,$partIds];
     }

@@ -101,10 +101,9 @@
                             <h3 class="mt-4 mb-3">Strumenti</h3>
                             <div class="instruments-container mb-4">
                                 @foreach ($musicsheetdata->instrumentMapping as $key => $instrument)
-                                    {{$instrument}}
-{{--                                    <div class="instrument" partId="{{$instrument[$key]}}">--}}
-{{--                                        @include('fragments.icons.'.$instrument)--}}
-{{--                                    </div>--}}
+                                    <div class="instrument" partId="{{$instrument}}">
+                                        @include('fragments.icons.'.$key)
+                                    </div>
                                 @endforeach
                             </div>
                             <div id="embed" class="w-100"></div>
