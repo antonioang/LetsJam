@@ -98,22 +98,24 @@ class MusicSheetController extends Controller
         $musicSheet->save();
         $musicSheet->instruments()->saveMany($instruments);
 
+        $mapping = [];
 
+        foreach ($instruments as $key => $ins) {
+            $mapping[$ins->name] = $temp[1][$key];
+        }
 
-        dd(
-            $request->input('title'),
-            $request->input('author'),
-            $request->input('songType'),
-            $request->input('songTitle'),
-            $request->input('songAuthor'),
-            $request->input('song'),
-            $request->input('songGenre'),
-            $request->input('brano'),
-            $request->input('content'),
-            $request->input('songType'),
-            $request->input('visibility'),
-            $request->input('musicSheetVisibility'),
-        );
+        $musicSheet = $musicSheet->fresh();
+
+        $musicsheetdata = (object)[
+            'id' => $musicSheet->id,
+            'content' => $musicSheet->music_sheet_data,
+            'instrumentMapping' => $mapping
+        ];
+
+        return view('musicsheets.musicSheet', [
+            'musicSheet' => $musicSheet->fresh(),
+            'musicsheetdata' => $musicsheetdata,
+        ]);
     }
 
     //show one musicsheet
@@ -124,10 +126,6 @@ class MusicSheetController extends Controller
 
         $sheet = MusicSheet::where('id', $id)->withCount('likes')->first();
 
-//        $sheet_content = json_decode($sheet->music_sheet_data, true);
-
-//        dd($sheet_content['score-partwise']['part-list']['score-part']);
-
         $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
         $mapping = [];
 
@@ -135,14 +133,12 @@ class MusicSheetController extends Controller
             $mapping[$ins->name] = $instrumentMapping[1][$key];
         }
 
-//        dd($mappping);
-
         $musicsheetdata = (object)[
             'id' => $sheet->id,
             'content' => $sheet->music_sheet_data,
             'instrumentMapping' => $mapping
         ];
-//        dd(MusicSheet::where('id', $id)->first());
+
         return view('musicsheets.musicSheet', [
             'musicSheet' => $sheet,
             'musicsheetdata' => $musicsheetdata,
@@ -206,25 +202,15 @@ class MusicSheetController extends Controller
     private function extractInstruments($score): array
     {
         $parts = json_decode($score, true);
-//        dd($parts);
         $parts = $parts['score-partwise']['part-list']['score-part'];
-        $scoreInstruments = [];
         $instruments = [];
         $partIds = [];
 
         foreach ($parts as $item) {
             $instruments[] = Instrument::where('name', $item['part-name'])->first();
             $fullId = $item["\$id"];
-//            $idParts = explode('-', $fullId);
             $partIds[] =  $fullId;
         }
-
-//        foreach ($scoreInstruments as $key => $scoreIntrument) {
-//            $instruments[] = Instrument::where('name', $scoreIntrument['instrument-name'])->first();
-//            $fullId = $scoreIntrument["\$id"];
-//            $idParts = explode('-', $fullId);
-//            $partIds[] =  $idParts[0];
-//        }
 
         return [$instruments,$partIds];
     }
