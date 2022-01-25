@@ -31,6 +31,9 @@ Route::middleware('auth')->group(function() {
     Route::post('musicsheets/getEmptyScore', [MusicSheetController::class, 'getEmptyScore']);
     Route::get('musicsheets/brani', [MusicSheetController::class, 'searchSong']);
     Route::post('musicsheets/analyze', [MusicSheetController::class, 'analyzeScore']);
+    Route::post('musicsheets/like', [MusicSheetController::class, 'like']);
+    Route::post('/musicsheets/modify', [MusicSheetController::class, 'modify'])->name('modify');
+    Route::post('musicsheets/dislike', [MusicSheetController::class, 'dislike']);
     Route::post('musicsheets/getScoreWithOnlyParts', [MusicSheetController::class, 'extractInstrumentPart']);
     Route::resource('musicsheets', MusicSheetController::class);
     Route::resource('songs', SongController::class);

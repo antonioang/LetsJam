@@ -13,9 +13,9 @@ document.addEventListener('DOMContentLoaded', () => {
         embed.loadJSON(musicSheetData.content);
         console.log(musicSheet, musicSheetData);
 
-        document.querySelector('div.button.submit').addEventListener('click', () => {
-            addInstrumentsToEmbed(embed);
-        });
+        // document.querySelector('div.button.submit').addEventListener('click', () => {
+        //     addInstrumentsToEmbed(embed);
+        // });
 
         document.getElementById('rearrange-submit').addEventListener('click', () => {
             embed.getJSON().then( result => {

@@ -52,13 +52,13 @@
 {{--                            <p th:text="${#temporals.format(musicSheet.createDateTime, 'dd/MM/yyyy')}"></p>--}}
                             <p>inserisici data formattata</p>
                         </div>
-{{--                        {{$isLiked= $musicSheet->likes->contains(Auth::user()->name)}}--}}
+                        {{$isLiked= $musicSheet->likes->contains(Auth::user()->name)}}
                         <div @class([
                             'mt-4' => true,
                              'd-flex' => true,
                               'align-items-center' => true,
                                'like' => true,
-                                'liked' => true
+                                'liked' => $isLiked
                             ]) inline="text" style="gap: 5px;">
                             <div class="icon round mr-2">
                                 @include('fragments.icons.like')

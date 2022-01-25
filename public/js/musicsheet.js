@@ -313,6 +313,9 @@ async function like(){
   let formData = new FormData();
   formData.append("musicSheetId", musicSheetData.id);
   return await fetch(endpoint, {
+      headers: {
+          'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
+      },
     method: "POST",
     ContentType: "multipart/form-data",
     processData: false,
@@ -357,7 +360,7 @@ function rearrange(){
     container.parentNode.insertBefore(saveButton, container.nextSibling);
     return;
   }
-  window.location.href= `http://${window.location.host}/musicsheets/rearrange/${musicSheetData.id}`;
+  window.location.href= `http://${window.location.host}/musicsheets/${musicSheetData.id}/edit`;
 }
 
 function updateMusicSheet(){

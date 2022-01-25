@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Instrument;
 use App\Models\Song;
 use App\Services\Utility\Utils;
+use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\MusicSheet;
@@ -145,14 +146,64 @@ class MusicSheetController extends Controller
         ]);
     }
 
-    public function edit($id)
-    {
-        //
+    public function like(Request $request) {
+        $user = User::find(auth()->user()->id);
+        $sheet =  $request->input('musicSheetId');
+        $musicSheet = MusicSheet::find($sheet);
+        $musicSheet->likes()->toggle($user->id);
+        return response()->json(['success' => 'success'], 200);
     }
 
-    public function update(Request $request, $id)
+    public function dislike(Request $request) {
+        $user = User::find(auth()->user()->id);
+        $sheet =  $request->input('musicSheetId');
+        $musicSheet = MusicSheet::find($sheet);
+        $musicSheet->likes()->toggle($user->id);
+        return response()->json(['success' => 'success'], 200);
+    }
+    //rearrange
+    public function edit($id)
     {
-        //
+        $sheet = MusicSheet::where('id', $id)->withCount('likes')->first();
+
+        $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
+        $mapping = [];
+
+        foreach ($instrumentMapping[0] as $key => $ins) {
+            $mapping[$ins->name] = $instrumentMapping[1][$key];
+        }
+
+        $musicsheetdata = (object)[
+            'id' => $sheet->id,
+            'content' => $sheet->music_sheet_data,
+            'instrumentMapping' => $mapping
+        ];
+
+        return view('musicsheets.rearrangeMusicSheet', [
+            'musicsheet' => $sheet,
+            'musicsheetdata' => $musicsheetdata,
+        ]);
+    }
+
+    public function modify(Request $request)
+    {
+        $id = $request->input('id');
+        $user = User::find(auth()->user()->id);
+        $sheet = MusicSheet::find($id);
+
+        $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
+
+        foreach ($instrumentMapping[0] as $key => $ins) {
+            $sheet->instruments()->toggle($ins->id);
+        }
+        $sheet->author = $request->input('author');
+        $sheet->title = $request->input('title');
+        $sheet->visibility = $request->input('musicSheetVisibility');
+        $sheet->verified = 0;
+        $sheet->rearranged = 1;
+
+        $sheet->save();
+        return redirect('/musicsheets/'.$id);
     }
 
     public function destroy($id)
