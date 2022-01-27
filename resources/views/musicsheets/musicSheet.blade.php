@@ -127,33 +127,45 @@
 
                             <h3 class="mt-5 mb-2">Commenti</h3>
                             <div class="comments-container d-flex flex-column mt-4 mb-3 w-100 p-5">
+{{--                                commenti--}}
+                                @foreach ($comments as $comment)
+                                    <div commentId="{{$comment->id}}" class="comment d-flex align-items-center justify-content-start">
+                                        @if($comment->user->avatar)
+                                            <div class="user-image" style="background:url('{{$comment->user->avatar}}');">
+                                                &nbsp;
+                                            </div>
+                                        @endif
+                                        @unless($comment->user->avatar)
+                                            <div class="user-image" style="background:url('https://avatars.dicebear.com/api/male/{{$comment->user->firstname}}.svg');">
+                                                &nbsp;
+                                            </div>
+                                        @endunless
+                                        <div class="d-flex flex-column align-items-start justify-content-start" style="flex:17;">
+                                            <h6 class="user-name">{{$comment->user->firstname}}{{$comment->user->lastname}}</h6>
+                                            <p class="comment-content">{{$comment->user->content}}</p>
+                                            <div class="d-flex align-items-center justify-content-start comment-actions" style="gap:10px">
+                                                <a href="" class="respond-button">Rispondi</a>
+                                                @if($comment->replies > 0)
+                                                    <a href="" class="showResponses-button" >[[#{common.showReplies}]]([[${comment.replies}]])</a>
+                                                @endif
+                                            </div>
+                                        </div>
+                                    </div>
+                                @endforeach
 
-{{--                                <div th:each="comment : ${comments}" th:commentId="${comment.id}" class="comment d-flex align-items-center justify-content-start">--}}
-{{--                                    <div class="user-image" th:if="${comment.user.avatar}" th:style="'background:url('+${comment.user.avatar}+');'">--}}
-{{--                                        &nbsp;--}}
-{{--                                    </div>--}}
-{{--                                    <div class="user-image" th:unless="${comment.user.avatar}" th:style="'background:url(https://avatars.dicebear.com/api/male/'+${comment.user.firstname}+'.svg);'">--}}
-{{--                                        &nbsp;--}}
-{{--                                    </div>--}}
-{{--                                    <div class="d-flex flex-column align-items-start justify-content-start" style="flex:17;">--}}
-{{--                                        <h6 class="user-name" th:text="${comment.user.firstname+' '+comment.user.lastname}"></h6>--}}
-{{--                                        <p class="comment-content" th:text="${comment.content}"></p>--}}
-{{--                                        <div class="d-flex align-items-center justify-content-start comment-actions" style="gap:10px">--}}
-{{--                                            <a href="" class="respond-button" th:text="#{common.reply}"></a>--}}
-{{--                                            <a href="" class="showResponses-button" th:if="${comment.replies > 0}" th:inline="text">[[#{common.showReplies}]]([[${comment.replies}]])</a>--}}
-{{--                                        </div>--}}
-{{--                                    </div>--}}
-{{--                                </div>--}}
-
-{{--                                <div class="write-comment">--}}
-{{--                                    <div class="user-image" th:if="${loggedUser.avatar}" th:style="'background:url('+${loggedUser.avatar}+');'">--}}
-{{--                                        &nbsp;--}}
-{{--                                    </div>--}}
-{{--                                    <div class="user-image" th:unless="${loggedUser.avatar}" th:style="'background:url(https://avatars.dicebear.com/api/male/'+${loggedUser.firstname}+'.svg);'">--}}
-{{--                                        &nbsp;--}}
-{{--                                    </div>--}}
-{{--                                    <input type="text" th:placeholder="#{common.writeComment}" style="flex:17;">--}}
-{{--                                </div>--}}
+                                <div class="write-comment">
+                                    @if(Auth::user()->avatar)
+                                        <div class="user-image" style="background:url('{{Auth::user()->avatar}}');">
+                                            &nbsp;
+                                        </div>
+                                    @endif
+                                    @unless(Auth::user()->avatar)
+                                        <div class="user-image" style="background:url('https://avatars.dicebear.com/api/male/{{Auth::user()->firstname}}.svg');">
+                                            &nbsp;
+                                        </div>
+                                    @endunless
+                                    <input type="text" placeholder="Scrivi il tuo commento" style="flex:17;">
+                                </div>
                             </div>
 
                         </div>

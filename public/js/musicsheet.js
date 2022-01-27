@@ -162,7 +162,7 @@ function addRespondtextBox(el) {
     ".svg)";
   let input = document.createElement("input");
   input.setAttribute("type", "text");
-  input.setAttribute("placeholder", (lang == 'it') ? "Scrivi il tuo commento" : "Write your comment");
+  input.setAttribute("placeholder",  "Scrivi il tuo commento");
   input.style.flex = "17";
   input.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
@@ -211,7 +211,7 @@ function addComment(input, parent, isResponse) {
 
   let respond = document.createElement("a");
   respond.classList = "respond-button";
-  respond.innerText = (lang == 'it') ? "Rispondi" : 'Reply';
+  respond.innerText = "Rispondi";
   respond.href = "";
   respond.addEventListener("click", (e) => {
     e.preventDefault();

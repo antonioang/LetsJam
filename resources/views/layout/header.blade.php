@@ -33,21 +33,41 @@
                                 <div class="collapse navbar-collapse sub-menu-bar" id="navbarSupportedContent">
                                     <p class="lang" style="display: none;" > th:text="${#locale}"</p>
                                     <ul id="nav" class="navbar-nav ml-auto">
-                                        <li class="nav-item">
-                                            <a href="/home">Home</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/musicsheets/" >spartiti</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/songs/">brani</a>
-                                        </li>
-                                        <li class="nav-item">
-                                            <a href="/musicsheets/create/">crea/carica</a>
-                                        </li>
-                                        <li  class="nav-item">
-                                            <a href="/about-us" >about us</a>
-                                        </li>
+                                        @auth
+                                            @if(Auth::user()->role != 'admin')
+                                                <li class="nav-item">
+                                                    <a href="/home">Home</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/musicsheets/" >spartiti</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/songs/">brani</a>
+                                                </li>
+                                                <li class="nav-item">
+                                                    <a href="/musicsheets/create/">crea/carica</a>
+                                                </li>
+                                                <li  class="nav-item">
+                                                    <a href="/about-us" >about us</a>
+                                                </li>
+                                            @endif
+                                            @elseguest
+                                            <li class="nav-item">
+                                                <a href="/home">Home</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/musicsheets/" >spartiti</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/songs/">brani</a>
+                                            </li>
+                                            <li class="nav-item">
+                                                <a href="/musicsheets/create/">crea/carica</a>
+                                            </li>
+                                            <li  class="nav-item">
+                                                <a href="/about-us" >about us</a>
+                                            </li>
+                                        @endauth
                                         @auth
                                             @if(Auth::user()->role == 'admin')
                                                 <li class="nav-item">

@@ -16,17 +16,25 @@ use \App\Http\Controllers\ProfileController;
 | contains the "web" middleware group. Now create something great!
 |
 */
+//
+//Route::get('/dashboard', function () {
+//    return view('dashboard');
+//})->middleware(['auth'])->name('dashboard');
 
 Route::get('/', function () {
     return view('welcome');
 });
+
 Route::get('/home', [MainController::class,'index']);
 
-Route::get('/dashboard', function () {
-    return view('dashboard');
-})->middleware(['auth'])->name('dashboard');
+Route::middleware(['auth'])->group(function() {
+    Route::get('/homeAdmin', function () {
+        return view('home.adminPanel');
+    })->name('admin');
+});
 
-Route::middleware('auth')->group(function() {
+Route::middleware(['auth'])->group(function() {
+
     Route::post('musicsheets/filter', [MusicSheetController::class, 'filter'])->name('filter');
     Route::post('musicsheets/getEmptyScore', [MusicSheetController::class, 'getEmptyScore']);
     Route::get('musicsheets/brani', [MusicSheetController::class, 'searchSong']);

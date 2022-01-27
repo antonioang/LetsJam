@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Psy\TabCompletion\Matcher\CommandsMatcher;
 
 
 /**
@@ -49,6 +50,11 @@ class MusicSheet extends Model
     public function song()
     {
         return $this->belongsTo(Song::class);
+    }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
     }
 
 }

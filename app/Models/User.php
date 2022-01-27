@@ -60,4 +60,9 @@ class User extends Authenticatable
     {
         return $this->hasMany(MusicSheet::class);
     }
+
+    public function comment()
+    {
+        return $this->hasMany(Comment::class);
+    }
 }

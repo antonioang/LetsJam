@@ -22,6 +22,6 @@ class DatabaseSeeder extends Seeder
 //        Instrument::factory(7)->create();
 //        Genre::factory(7)->create();
 //        Song::factory(7)->create();
-        MusicSheet::factory(7)->create();
+//        MusicSheet::factory(7)->create();
     }
 }

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Comment;
 use App\Models\Instrument;
 use App\Models\Song;
 use App\Services\Utility\Utils;
@@ -140,9 +141,14 @@ class MusicSheetController extends Controller
             'instrumentMapping' => $mapping
         ];
 
+        $comments = Comment::all();
+
+//        dd($comments);
+
         return view('musicsheets.musicSheet', [
             'musicSheet' => $sheet,
             'musicsheetdata' => $musicsheetdata,
+            'comments' => $comments,
         ]);
     }
 

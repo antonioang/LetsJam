@@ -18,11 +18,11 @@ class CreateCommentsTable extends Migration
             $table->id();
             $table->string('content');
             $table->bigInteger('music_sheet_id')->unsigned();
-            $table->bigInteger('parent_id')->unsigned();
-            $table->bigInteger('user')->unsigned();
+            $table->bigInteger('parent_id')->unsigned()->nullable();
+            $table->bigInteger('user_id')->unsigned();
             $table->foreign('music_sheet_id')->references('id')->on('music_sheets');
             $table->foreign('parent_id')->references('id')->on('comments');
-            $table->foreign('user')->references('id')->on('users');
+            $table->foreign('user_id')->references('id')->on('users');
             $table->timestamps();
         });
     }
