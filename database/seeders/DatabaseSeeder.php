@@ -23,5 +23,12 @@ class DatabaseSeeder extends Seeder
 //        Genre::factory(7)->create();
 //        Song::factory(7)->create();
 //        MusicSheet::factory(7)->create();
+
+//        $sheets = MusicSheet::all();
+//        $trumpet = Instrument::where('name', 'Trumpet')->first();
+//
+//        foreach ($sheets as $sheet) {
+//            $sheet->instruments()->attach($trumpet->id);
+//        }
     }
 }
