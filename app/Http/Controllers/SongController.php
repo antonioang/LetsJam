@@ -50,24 +50,6 @@ class SongController extends Controller
         //
     }
 
-    private function getReadableLyrics(string $rawLyrics)
-    {
-//        $rawLyrics
-        //Remove start
-        $rawLyrics = preg_replace("#[\\S\\s]*<div class=\\\\\\\\\\\\\"rg_embed_body\\\\\\\\\\\\\">[ (\\\\n)]*#", "", $rawLyrics);
-        //Remove end
-        $rawLyrics = preg_replace("#[ (\\\\n)]*<\\\\/div>[\\S\\s]*#", "", $rawLyrics);
-        //Remove tags between
-        $rawLyrics = preg_replace("#<[^<>]*>#", "", $rawLyrics);
-        //Unescape spaces
-        $rawLyrics = preg_replace("#\\\\\\\\n#", "\n", $rawLyrics);
-        //Unescape '
-        $rawLyrics = preg_replace("#\\\\'#", "'", $rawLyrics);
-        //Unescape "
-        $rawLyrics = preg_replace("#\\\\\\\\\\\\\"#", "\"", $rawLyrics);;
-        return $rawLyrics;
-    }
-
     /**
      * Display the specified resource.
      *
@@ -75,23 +57,11 @@ class SongController extends Controller
      */
     public function show(int $id)
     {
-        $GENIUS_EMBED_URL_HEAD = "https://genius.com/songs/";
-        $GENIUS_EMBED_URL_TAIL = "/embed.js";
-
-        $authentication = new Bearer(env('GENIUS_ACCESS_TOKEN'));
-        $genius = new Genius($authentication);
-        $result = $genius->getSearchResource()->get('albachiara');
-//        $resultSong= $genius->getSongsResource()->get($result->hits[0]->result->id, 'html');
-//        $embed = $resultSong->song->embed_content;
-
-        $rawLyrics = Http::get($GENIUS_EMBED_URL_HEAD . $result->hits[0]->result->id . $GENIUS_EMBED_URL_TAIL);
-        $radable = $this->getReadableLyrics($rawLyrics);
-//        dd($resultSong);
-
+        $song = Song::find($id);
 
         return view('songs.song', [
-            'song' => Song::where('id', $id)->first(),
-            'readable' => $radable,
+            'song' => $song,
+            'readable' => $song->lyrics,
         ]);
     }
 

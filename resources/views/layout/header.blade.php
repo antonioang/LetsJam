@@ -36,36 +36,36 @@
                                         @auth
                                             @if(Auth::user()->role != 'admin')
                                                 <li class="nav-item">
-                                                    <a href="/home">Home</a>
+                                                    <a @class(['active' => Request::is('home')]) href="/home">Home</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="/musicsheets/" >spartiti</a>
+                                                    <a @class(['active' => Request::is('musicsheets')]) href="/musicsheets/" >spartiti</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="/songs/">brani</a>
+                                                    <a @class(['active' => Request::is('songs')]) href="/songs/">brani</a>
                                                 </li>
                                                 <li class="nav-item">
-                                                    <a href="/musicsheets/create/">crea/carica</a>
+                                                    <a @class(['active' => Request::is('musicsheets/create/')]) href="/musicsheets/create/">crea/carica</a>
                                                 </li>
                                                 <li  class="nav-item">
-                                                    <a href="/about-us" >about us</a>
+                                                    <a @class(['active' => Request::is('aboutUs')]) href="/aboutUs" >about us</a>
                                                 </li>
                                             @endif
                                             @elseguest
                                             <li class="nav-item">
-                                                <a href="/home">Home</a>
+                                                <a @class(['active' => Request::is('home')]) href="/home">Home</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="/musicsheets/" >spartiti</a>
+                                                <a @class(['active' => Request::is('musicsheets')]) href="/musicsheets/" >spartiti</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="/songs/">brani</a>
+                                                <a @class(['active' => Request::is('songs')]) href="/songs/">brani</a>
                                             </li>
                                             <li class="nav-item">
-                                                <a href="/musicsheets/create/">crea/carica</a>
+                                                <a @class(['active' => Request::is('musicsheets/create/')]) href="/musicsheets/create/">crea/carica</a>
                                             </li>
                                             <li  class="nav-item">
-                                                <a href="/about-us" >about us</a>
+                                                <a @class(['active' => Request::is('aboutUs')]) href="/aboutUs" >about us</a>
                                             </li>
                                         @endauth
                                         @auth

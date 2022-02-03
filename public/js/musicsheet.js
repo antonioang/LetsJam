@@ -155,11 +155,12 @@ function addRespondtextBox(el) {
   let userImage = document.createElement("div");
   userImage.classList.add("user-image");
   userImage.append("\u00A0");
-  userImage.style.background = loggedUser.avatar
+  userImage.style.background = loggedUser.avatar !== ''
   ? "url("+loggedUser.avatar+")"
   : "url(https://avatars.dicebear.com/api/male/" +
     loggedUser.firstname +
     ".svg)";
+    console.log(userImage)
   let input = document.createElement("input");
   input.setAttribute("type", "text");
   input.setAttribute("placeholder",  "Scrivi il tuo commento");
@@ -185,7 +186,7 @@ function addComment(input, parent, isResponse) {
     : "comment d-flex align-items-center justify-content-start";
   let userImage = document.createElement("div");
   userImage.classList.add("user-image");
-  userImage.style.background = loggedUser.avatar
+  userImage.style.background = loggedUser.avatar !== ''
     ? "url("+loggedUser.avatar+")"
     : "url(https://avatars.dicebear.com/api/male/" +
       loggedUser.firstname +
@@ -243,6 +244,9 @@ async function persistComment(content, parentId) {
   formData.append("musicSheetId", musicSheetData.id);
 
   return await fetch("/musicsheets/addComment", {
+      headers: {
+          'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
+      },
     method: "POST",
     ContentType: "multipart/form-data",
     processData: false,
@@ -257,6 +261,9 @@ async function showReplies(commentId){
   formData.append("parentId", commentId);
 
   return await fetch("/musicsheets/getReplies", {
+      headers: {
+          'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
+      },
     method: "POST",
     ContentType: "multipart/form-data",
     processData: false,

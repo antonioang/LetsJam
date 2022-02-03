@@ -21,17 +21,19 @@ use \App\Http\Controllers\ProfileController;
 //    return view('dashboard');
 //})->middleware(['auth'])->name('dashboard');
 
-Route::get('/', function () {
-    return view('welcome');
-});
+//Route::get('/', function () {
+//    return view('welcome');
+//});
 
 Route::get('/home', [MainController::class,'index']);
 
-Route::middleware(['auth'])->group(function() {
-    Route::get('/homeAdmin', function () {
-        return view('home.adminPanel');
-    })->name('admin');
-});
+Route::get('/aboutUs', [MainController::class,'aboutUs']);
+
+//Route::middleware(['auth'])->group(function() {
+//    Route::get('/homeAdmin', function () {
+//        return view('home.adminPanel');
+//    })->name('admin');
+//});
 
 Route::middleware(['auth'])->group(function() {
 
@@ -42,6 +44,8 @@ Route::middleware(['auth'])->group(function() {
     Route::post('musicsheets/like', [MusicSheetController::class, 'like']);
     Route::post('/musicsheets/modify', [MusicSheetController::class, 'modify'])->name('modify');
     Route::post('musicsheets/dislike', [MusicSheetController::class, 'dislike']);
+    Route::post('musicsheets/addComment', [MusicSheetController::class, 'addComment']);
+    Route::post('musicsheets/getReplies', [MusicSheetController::class, 'getReplies']);
     Route::post('musicsheets/getScoreWithOnlyParts', [MusicSheetController::class, 'extractInstrumentPart']);
     Route::resource('musicsheets', MusicSheetController::class);
     Route::resource('songs', SongController::class);

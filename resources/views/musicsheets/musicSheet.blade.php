@@ -49,8 +49,7 @@
                                 <i></i>
                             </div>
                             <span class="label mr-2" >Data caricamento:</span>
-{{--                            <p th:text="${#temporals.format(musicSheet.createDateTime, 'dd/MM/yyyy')}"></p>--}}
-                            <p>inserisici data formattata</p>
+                            <p>{{str_replace('-', '/', $musicSheet->created_at)}}</p>
                         </div>
                         {{$isLiked= $musicSheet->likes->contains(Auth::user()->name)}}
                         <div @class([
@@ -85,10 +84,10 @@
                     </div>
 
                     <div class="right-container d-flex flex-column align-items-end">
-                        @if($musicSheet->song->imageUrl != null)
-                            <img src="{{asset($musicSheet->song->imageUrl)}}" alt="song image cover" class="song-image">
+                        @if($musicSheet->song->image_url != null)
+                            <img src="{{asset($musicSheet->song->image_url)}}" alt="song image cover" class="song-image">
                         @endif
-                        @unless($musicSheet->song->imageUrl != null)
+                        @unless($musicSheet->song->image_url != null)
                             <img src="{{asset('/img/nocover.jpg')}}" alt="song image cover" class="song-image">
                         @endunless
                     </div>

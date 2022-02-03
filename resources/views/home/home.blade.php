@@ -14,7 +14,7 @@
                                 <p class="wow fadeInUp" data-wow-delay=".5s"> Componi, riarrangia, condividi! Tutte
                                     le risorse per dare sfogo alla tua vena creativa con un solo click!</p>
                                 <div class="button wow fadeInUp mb-5" data-wow-delay=".7s">
-                                    <a href="/about-us" class="btn">Per saperne di più</a>
+                                    <a href="/aboutUs" class="btn">Per saperne di più</a>
                                 </div>
                             </div>
                         </div>

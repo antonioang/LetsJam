@@ -23,11 +23,14 @@ class MainController extends Controller
             $sheetsForGenres[$genre->name] = $forGenres;
 
         }
-//        dd($sheetsForGenres);
 
         return view('home.home', [
             'mostpopular' => $mostpopular,
             'sheetsForGenres' => $sheetsForGenres,
         ]);
+    }
+
+    public function aboutUs() {
+        return view('aboutus.aboutus');
     }
 }

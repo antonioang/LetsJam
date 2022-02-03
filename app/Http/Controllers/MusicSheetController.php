@@ -10,6 +10,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\MusicSheet;
+use Illuminate\Support\Facades\Auth;
 use PhpParser\Node\Expr\Cast\Object_;
 
 class MusicSheetController extends Controller
@@ -215,6 +216,38 @@ class MusicSheetController extends Controller
     public function destroy($id)
     {
         //
+    }
+
+    public function addComment(Request $request) {
+        $content = $request->input('content');
+        $parentId = $request->input('parentId');
+        $musicSheetId = $request->input('musicSheetId');
+
+        $newComment = new Comment();
+
+        $newComment->user_id = Auth::user()->id;
+        $newComment->content = $content;
+        $newComment->parent_id = $parentId !== 'null' ? $parentId : null;
+        $newComment->music_sheet_id = $musicSheetId;
+
+        $newComment->save();
+    }
+
+    public function getReplies(Request $request) {
+        $id = $request->input('parentId');
+        $replies = Comment::where('parent_id', $id)->get();
+        $result= [];
+        foreach($replies as $c) {
+            $result[] = [
+                'content' => $c->content,
+                'userAvatar' => $c->user->avatar,
+                'lastName' => $c->user->lastname,
+                'firstName' => $c->user->firstname,
+                'id' => $c->id,
+            ];
+        }
+
+        return response()->json($result);
     }
 
     public function extractInstrumentPart(Request $request) {
