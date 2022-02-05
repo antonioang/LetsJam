@@ -141,11 +141,11 @@
                                         @endunless
                                         <div class="d-flex flex-column align-items-start justify-content-start" style="flex:17;">
                                             <h6 class="user-name">{{$comment->user->firstname}}{{$comment->user->lastname}}</h6>
-                                            <p class="comment-content">{{$comment->user->content}}</p>
+                                            <p class="comment-content">{{$comment->content}}</p>
                                             <div class="d-flex align-items-center justify-content-start comment-actions" style="gap:10px">
                                                 <a href="" class="respond-button">Rispondi</a>
-                                                @if($comment->replies > 0)
-                                                    <a href="" class="showResponses-button" >[[#{common.showReplies}]]([[${comment.replies}]])</a>
+                                                @if($comment->children)
+                                                    <a href="" class="showResponses-button" >Mostra {{count($comment->children)}} risposte</a>
                                                 @endif
                                             </div>
                                         </div>

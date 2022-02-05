@@ -142,7 +142,7 @@ class MusicSheetController extends Controller
             'instrumentMapping' => $mapping
         ];
 
-        $comments = Comment::all();
+        $comments = Comment::where('music_sheet_id', $sheet->id)->get();
 
 //        dd($comments);
 

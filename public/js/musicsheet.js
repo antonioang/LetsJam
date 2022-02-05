@@ -167,6 +167,7 @@ function addRespondtextBox(el) {
   input.style.flex = "17";
   input.addEventListener("keyup", (e) => {
     if (e.keyCode === 13) {
+        console.log(el)
       addComment(input, el, true);
     }
   });
@@ -177,7 +178,7 @@ function addRespondtextBox(el) {
 }
 
 function addComment(input, parent, isResponse) {
-  if (isResponse) persistComment(input.value, 1);
+  if (isResponse) persistComment(input.value, parent.getAttribute('commentId'));
   else persistComment(input.value, null);
 
   let comment = document.createElement("div");
@@ -186,11 +187,10 @@ function addComment(input, parent, isResponse) {
     : "comment d-flex align-items-center justify-content-start";
   let userImage = document.createElement("div");
   userImage.classList.add("user-image");
-  userImage.style.background = loggedUser.avatar !== ''
+    console.log(loggedUser.firstname)
+  userImage.style.background = loggedUser.avatar
     ? "url("+loggedUser.avatar+")"
-    : "url(https://avatars.dicebear.com/api/male/" +
-      loggedUser.firstname +
-      ".svg)";
+    : "url(https://avatars.dicebear.com/api/male/" + loggedUser.firstname + ".svg)";
   userImage.style.backgroundPosition = "center";
   userImage.style.backgroundSize = "cover";
   userImage.append("\u00A0");
@@ -254,7 +254,8 @@ async function persistComment(content, parentId) {
   });
 }
 
-async function showReplies(commentId){
+async function
+showReplies(commentId){
   let parent = document.querySelector(`[commentid="${commentId}"]`);
 
   let formData = new FormData();
@@ -277,7 +278,7 @@ async function showReplies(commentId){
       comment.classList = "comment response d-flex align-items-center justify-content-start";
       let userImage = document.createElement("div");
       userImage.classList.add("user-image");
-      userImage.style.background = r.userAvatar ? "url("+r.userAvatar+")" : "url(https://avatars.dicebear.com/api/male/" +r.firstName +".svg)";
+      userImage.style.background = r.userAvatar ? "url("+r.userAvatar+")" : "url(https://avatars.dicebear.com/api/male/" +r.firstname +".svg)";
       userImage.style.backgroundPosition = "center";
       userImage.style.backgroundSize = "cover";
       userImage.append("\u00A0");
