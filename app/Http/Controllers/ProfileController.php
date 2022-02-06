@@ -8,6 +8,8 @@ use App\Models\MusicSheet;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Storage;
+use Symfony\Component\Console\Input\Input;
 
 class ProfileController extends Controller
 {
@@ -32,6 +34,18 @@ class ProfileController extends Controller
         $userId = $user->id;
         $loggedUser = User::find($userId);
         $inputs = $request->all();
+        $ext = $request->file('imgInput')->getClientOriginalExtension();
+        $file =  $request->file('imgInput');
+        $userAvatarPath = "storage/uploads/".$userId.'.'.$ext;
+
+//        dd($request->file('imgInput')->getClientOriginalExtension());
+        if ($file) {
+            if (Storage::exists($userAvatarPath)) {
+                Storage::delete($userAvatarPath);
+            }
+            Storage::put('public/uploads/'.$userId.'.'.$ext, $file->getContent());
+            $loggedUser->avatar = $userAvatarPath;
+        }
 
         foreach ($instruments as $instrument) {
             if (array_key_exists('preferredInstruments',$inputs)) {
