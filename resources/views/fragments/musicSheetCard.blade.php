@@ -1,6 +1,14 @@
 
 @push('extra-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/musicSheetCard.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/css/song.css')}}">
+@endpush
+@push('extra-js')
+    <script>
+        function goToSheet(id) {
+            window.location.href = `/musicsheets/${id}`;
+        }
+    </script>
 @endpush
 
     <div>
@@ -11,14 +19,18 @@
                     @auth
                     @if(Auth::user()->role == 'admin')
                         <div class="d-flex align-items-center">
-                            <div id="{{$musicSheet->id}}" class="verified-badge d-flex align-items-center"
-{{--                                 th:classappend="${!musicsheet.verified ? 'not-verified-badge' : ''}"--}}
-                            >
-                                {{--                            <svg th:replace="fragments/icons :: verifyBadge"></svg>--}}
-
-                                @include('fragments.verifyBadge')
-                                Verificato
-                            </div>
+                            @if($musicSheet->verified)
+                                <div id="{{$musicSheet->id}}" class="verified-badge d-flex mt-4 align-items-center" inline="text">
+                                    @include('fragments.icons.verifyBadge')
+                                    Verificato
+                                </div>
+                            @endif
+                            @unless($musicSheet->verified)
+                                <div id="{{$musicSheet->id}}" class="verified-badge disabled d-flex align-items-center" inline="text">
+                                    @include('fragments.icons.verifyBadge')
+                                    Verificato
+                                </div>
+                            @endunless
                         </div>
                     @endif
                     @endauth

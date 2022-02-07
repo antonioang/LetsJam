@@ -19,7 +19,6 @@
                         @csrf
                         <div class="search mb-5">
                             @include('fragments.icons.search')
-    {{--                        <input type="text" placeholder="Cerca" th:field="*{search}">--}}
                             <input type="text" placeholder="Cerca">
                         </div>
 

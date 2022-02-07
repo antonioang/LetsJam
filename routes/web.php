@@ -25,15 +25,17 @@ use \App\Http\Controllers\ProfileController;
 //    return view('welcome');
 //});
 
-Route::get('/home', [MainController::class,'index']);
+Route::get('/home', [MainController::class,'index'])->name('home');
 
 Route::get('/aboutUs', [MainController::class,'aboutUs']);
 
-//Route::middleware(['auth'])->group(function() {
-//    Route::get('/homeAdmin', function () {
-//        return view('home.adminPanel');
-//    })->name('admin');
-//});
+Route::middleware(['user-role'])->group(function() {
+    Route::get('/admin/manageUsers', [MainController::class, 'manageUsers']);
+    Route::post('/admin/manageUsers', [MainController::class, 'promoteUsers']);
+    Route::post('/admin/deleteUsers', [MainController::class, 'deleteUsers']);
+    Route::get('/admin/verifyMusicsheet', [MainController::class, 'indexSheets']);
+    Route::post('/admin/verifyMusicsheet', [MainController::class, 'verifySheets']);
+});
 
 Route::middleware(['auth'])->group(function() {
 

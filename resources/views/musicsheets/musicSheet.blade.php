@@ -72,6 +72,12 @@
                                 Verificato
                             </div>
                         @endif
+                        @unless($musicSheet->verified)
+                            <div class="verified-badge disabled mt-4 d-flex align-items-center" inline="text">
+                                @include('fragments.icons.verifyBadge')
+                                Verificato
+                            </div>
+                        @endunless
                         @if(Auth::user()->role == 'admin')
                             <div class="verify-btn verify-btn-detail-pg">
                                 @if(!$musicSheet->verified)

@@ -14,12 +14,11 @@ class RoleMiddleware
 
         if ($request->user()) {
             if ( $request->user()->role == $role) {
-                dd('ciao');
-                return route('admin');
+                return $next($request);
             }
         }
 
-        return $next($request);
+        return redirect('/home');
 
     }
 }

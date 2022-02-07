@@ -3,7 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Models\Genre;
+use App\Models\Instrument;
 use App\Models\MusicSheet;
+use App\Models\User;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
@@ -27,6 +29,33 @@ class MainController extends Controller
         return view('home.home', [
             'mostpopular' => $mostpopular,
             'sheetsForGenres' => $sheetsForGenres,
+        ]);
+    }
+
+    public function manageUsers() {
+        $users = User::all();
+        return view('admin.manageUsers', ['users' => $users]);
+    }
+
+    public function promoteUsers() {
+        $users = User::all();
+        return view('admin.manageUsers', ['users' => $users]);
+    }
+
+    public function deleteUsers() {
+        $users = User::all();
+        return view('admin.manageUsers', ['users' => $users]);
+    }
+
+    public function indexSheets() {
+        return view('admin.adminVerifySheets', [
+            'checkedGenres' => [],
+            'checkedInstruments' => [],
+            'genres' => Genre::all(),
+            'instruments' => Instrument::all(),
+            'sortDirection' => 'ASC',
+            'sortOrderr' => '',
+            'musicSheets' => MusicSheet::withCount('likes')->paginate(5)
         ]);
     }
 
