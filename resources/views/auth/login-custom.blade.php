@@ -15,9 +15,7 @@
     <link rel="stylesheet" type="text/css" href="{{asset('/css/login.css')}}"/>
     <title>login</title>
 
-{{--@push('extra-js')--}}
-{{--    <script type="text/javascript" src="{{asset('/js/login.js')}}" ></script>--}}
-{{--@endpush--}}
+    <script type="text/javascript" src="{{asset('/js/login.js')}}" ></script>
 </head>
 
 <body>
@@ -51,12 +49,6 @@
         </div>
     </form>
     <a href="/register" class="mt-2" style="font-size: 16px;"> Registrati</a>
-
-{{--    <div class="internationalization">--}}
-{{--        <p class="lang" style="display: none;" th:text="${#locale}"></p>--}}
-{{--        <img class="flag-container" th:if="${#locale.toString() == 'it'}" th:src="@{/img/i18n/it-flag.png}" alt="it">--}}
-{{--        <img class="flag-container" th:if="${#locale.toString() == 'en'}" th:src="@{/img/i18n/uk-flag.png}" alt="en">--}}
-{{--    </div>--}}
 </div>
 
 </body>

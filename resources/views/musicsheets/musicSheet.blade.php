@@ -51,13 +51,12 @@
                             <span class="label mr-2" >Data caricamento:</span>
                             <p>{{str_replace('-', '/', $musicSheet->created_at)}}</p>
                         </div>
-                        {{$isLiked= $musicSheet->likes->contains(Auth::user()->name)}}
                         <div @class([
                             'mt-4' => true,
                              'd-flex' => true,
                               'align-items-center' => true,
                                'like' => true,
-                                'liked' => $isLiked
+                                'liked' => in_array(Auth::user()->firstname, $musicSheet->likes->pluck('firstname')->toArray())
                             ]) inline="text" style="gap: 5px;">
                             <div class="icon round mr-2">
                                 @include('fragments.icons.like')

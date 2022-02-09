@@ -231,7 +231,12 @@ function addComment(input, parent, isResponse) {
   if (isResponse) input.parentElement.remove();
   else input.parentElement.style.display = "none";
   input.value = "";
-  parent.parentNode.insertBefore(comment, parent.nextSibling);
+  if (parent) {
+    parent.parentNode.insertBefore(comment, parent.nextSibling);
+  } else {
+      let lastComment = document.querySelector(".comments-container")
+      lastComment.appendChild(comment);
+  }
   document
     .querySelectorAll(".write-comment")
     .forEach((el) => (el.style.display = "flex"));
@@ -313,7 +318,7 @@ async function like(){
   }
   else {
     element.classList.add('liked');
-    likes=+1;
+    likes += 1;
   }
 
   document.querySelector('.like').lastElementChild.innerText = likes;

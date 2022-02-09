@@ -29,12 +29,12 @@ class DatabaseSeeder extends Seeder
 //
 //        foreach ($sheets as $sheet) {
 //            $sheet->instruments()->attach($trumpet->id);
-
-            //aggiungo randomicamente dei generi alle canzoni
+//
+//            //aggiungo randomicamente dei generi alle canzoni
 //            $genre = Genre::all()->random();
 //            $sheet->genres()->attach($genre->id);
-
-            //aggiungo randomicamente dei likes alle canzoni
+//
+//            //aggiungo randomicamente dei likes alle canzoni
 //            $user = User::all()->random();
 //            $sheet->likes()->attach($user->id);
 //        }

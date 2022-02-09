@@ -20,7 +20,7 @@ class RegisteredUserController extends Controller
      */
     public function create()
     {
-        return view('auth.register');
+        return view('auth.register-custom');
     }
 
     /**
@@ -33,21 +33,29 @@ class RegisteredUserController extends Controller
      */
     public function store(Request $request)
     {
-        $request->validate([
-            'name' => ['required', 'string', 'max:255'],
-            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
-        ]);
+//        $request->validate([
+//            'firstname' => ['required', 'string', 'max:255'],
+//            'lastname' => ['required', 'string', 'max:255'],
+//            'username' => ['required', 'string', 'max:255'],
+//            'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
+//            'password' => ['required', 'confirmed'],
+//        ]);
+//        dd($request->username);
+        $user = new User();
+        $user->firstname = $request->firstname;
+        $user->lastname = $request->lastname;
+        $user->username = $request->username;
+        $user->email = $request->email;
+        $user->role = 'utente';
+        $user->avatar = '';
+        $user->remember_token = 'registered';
+        $user->password = Hash::make($request->password);
 
-        $user = User::create([
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-        ]);
+        $user->save();
 
-        event(new Registered($user));
+        event(new Registered($user->fresh()));
 
-        Auth::login($user);
+        Auth::login($user->fresh());
 
         return redirect(RouteServiceProvider::HOME);
     }

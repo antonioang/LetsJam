@@ -205,6 +205,7 @@ class MusicSheetController extends Controller
         }
         $sheet->author = $request->input('author');
         $sheet->title = $request->input('title');
+        $sheet->music_sheet_data = $request->input('content');
         $sheet->visibility = $request->input('musicSheetVisibility');
         $sheet->verified = 0;
         $sheet->rearranged = 1;
