@@ -34,7 +34,7 @@ function fillForm(wrapper, users, amico) {
     newAdmin.setAttribute('type', 'checkbox')
     newAdmin.setAttribute('value', amico.currentTarget.dataset.user)
     newAdmin.setAttribute('checked', 'true')
-    newAdmin.setAttribute('name', 'userIds')
+    newAdmin.setAttribute('name', 'userIds[]')
     div.appendChild(newAdmin);
     div.appendChild(label);
     wrapper.appendChild(div)

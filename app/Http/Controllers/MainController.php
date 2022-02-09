@@ -37,14 +37,26 @@ class MainController extends Controller
         return view('admin.manageUsers', ['users' => $users]);
     }
 
-    public function promoteUsers() {
+    public function promoteUsers(Request $request) {
         $users = User::all();
-        return view('admin.manageUsers', ['users' => $users]);
+        $ids = $request->input('userIds');
+
+        foreach($ids as $id) {
+            $user = User::find($id);
+            $user->role = 'admin';
+            $user->save();
+        }
+        return view('admin.manageUsers', ['users' => $users->fresh()]);
     }
 
-    public function deleteUsers() {
+    public function deleteUsers(Request $request) {
         $users = User::all();
-        return view('admin.manageUsers', ['users' => $users]);
+        $ids = $request->input('userIds');
+
+        foreach($ids as $id) {
+            User::find($id)->delete();
+        }
+        return view('admin.manageUsers', ['users' => $users->fresh()]);
     }
 
     public function indexSheets() {
@@ -57,6 +69,14 @@ class MainController extends Controller
             'sortOrderr' => '',
             'musicSheets' => MusicSheet::withCount('likes')->paginate(5)
         ]);
+    }
+
+    public function verifySheets(Request $request) {
+        $id = $request->input('musicSheetId');
+        $toManage = MusicSheet::find($id);
+        $toManage->verified = 1;
+        $toManage->save();
+        return response('ok',200);
     }
 
     public function aboutUs() {

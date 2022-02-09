@@ -59,28 +59,44 @@
                     <p><span>Genere: </span> Non definito{{$musicSheet->song}}</p>
                 @endunless
                 <div class="d-flex align-items-center justify-content-between mt-2" style="gap:10px;">
-{{--                    <div class="avatar" th:if="${musicsheet.user.avatar}" style="'background:url('+${musicsheet.user.avatar}+');'">--}}
-{{--                        &nbsp;--}}
-{{--                    </div>--}}
-{{--                    <div class="avatar" th:unless="${musicsheet.user.avatar}" style="'background:url(https://avatars.dicebear.com/api/male/'+${musicsheet.user.firstname}+'.svg);'">--}}
-{{--                        &nbsp;--}}
-{{--                    </div>--}}
+                    @auth
+                        @if($musicSheet->user->avatar)
+                            <div class="avatar" style="background:url({{asset($musicSheet->user->avatar)}});">
+                                &nbsp;
+                            </div>
+                        @endif
+                        @unless($musicSheet->user->avatar)
+                            <div class="avatar" style="background:url(https://avatars.dicebear.com/api/male/{{$musicSheet->user->firstname}}.svg);">
+                                &nbsp;
+                            </div>
+                        @endunless
+                    @endauth
                     <p class="mt-1"style="margin:0; text-transform: capitalize;">{{$musicSheet->user->firstname}}</p>
                 </div>
                 </div>
-{{--                <div sec:authorize="!hasRole('AMMINISTRATORE')" class="d-flex flex-row align-items-center justify-content-end" style="gap:20px">--}}
-
-{{--                    <div class="icon" th:each="instrument : ${musicsheet.instruments}">--}}
-{{--                        <svg th:replace="fragments/icons :: __${instrument.name.toLowerCase()}__"></svg>--}}
-{{--                        <i></i>--}}
-{{--                    </div>--}}
-
-{{--                </div>--}}
+                @auth
+                    @if(Auth::user()->role !== 'admin')
+                        <div class="d-flex flex-row align-items-center justify-content-end" style="gap:20px">
+                            @foreach($musicSheet->instruments as $instrument)
+                                <div class="icon">
+                                    @include('fragments.icons.'.$instrument->name)
+                                </div>
+                            @endforeach
+                        </div>
+                    @endif
+                @endauth
             </div>
         </div>
-{{--        <div class="verify-btn" sec:authorize="hasRole('AMMINISTRATORE')">--}}
-{{--            <div th:data-verify="${musicsheet.id}" th:if="${!musicsheet.verified}" class="action-container">--}}
-{{--                <span th:text="#{admin.manageSheets.verify}" class="d-flex flex-row align-items-center justify-content-end" style="gap:20px"></span>--}}
-{{--            </div>--}}
-{{--        </div>--}}
+        @auth
+            @if(Auth::user()->role == 'admin')
+                <div class="verify-btn">
+                    @if(!$musicSheet->verified)
+                        <div data-verify="{{$musicSheet->id}}" class="action-container">
+                            <span class="d-flex flex-row align-items-center justify-content-end" style="gap:20px">Verifica spartito</span>
+                        </div>
+                    @endif
+                </div>
+            @endif
+        @endauth
+
     </div>

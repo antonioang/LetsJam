@@ -19,7 +19,7 @@
                     <div class="row align-items-center">
                         <div class="col-lg-12">
                             <nav class="navbar navbar-expand-lg">
-                                <a class="navbar-brand logo" href="/">
+                                <a class="navbar-brand logo" href="/home">
                                     <img class="logo1" src="{{asset('/img/logo.png')}}" alt="LET'S JAM" />
                                 </a>
                                 <button class="navbar-toggler" type="button" data-toggle="collapse"
