@@ -49,7 +49,7 @@
                             <p inline="text">{{floor(($song->duration/1000)/60)}} minuti {{($song->duration/1000)%60}} secondi</p>
                         </div>
                     @endif
-                    @if($song->spotify_id != null)
+                    @if($song->spotify_id != null && $song->spotify_id != 0)
                         <iframe title="spotify-player"
                                 src="https://open.spotify.com/embed/track/{{$song->spotify_id}}"
                                 height="80" allow="encrypted-media" class="spotify-player mt-4">
@@ -80,27 +80,32 @@
     </section>
 
     <!--Last insert-->
-{{--    <section class="service section" th:if="${musicSheets.size() > 0}">--}}
-{{--        <div class="container">--}}
-{{--            <div class="row">--}}
-{{--                <div class="col-12 relative">--}}
-{{--                    <div class="section-title align-left">--}}
-{{--                        <span class="wow fadeInDown" data-wow-delay=".2s" th:text="#{song.musicSheets}"></span>--}}
-{{--                        <h2 class="wow fadeInUp" data-wow-delay=".4s" th:inline="text">[[#{song.musicSheets.title}]] [[${song.title}]]</h2>--}}
-{{--                        <p class="wow fadeInUp" data-wow-delay=".6s" th:text="#{song.musicSheets.description}"></p>--}}
-{{--                    </div>--}}
+    @if($musicsheets)
+        <section class="service section">
+            <div class="container">
+                <div class="row">
+                    <div class="col-12 relative">
+                        <div class="section-title align-left">
+                            <span class="wow fadeInDown" data-wow-delay=".2s">Spartiti</span>
+                            <h2 class="wow fadeInUp" data-wow-delay=".4s">Esplora gli spartiti per il brano</h2>
+                            <p class="wow fadeInUp" data-wow-delay=".6s">Prendi ispirazione, suona, scarica o riarrangia gli spartiti inseriti dalla nostra community</p>
+                        </div>
 
-{{--                    <div th:each="musicsheet : ${musicSheets}">--}}
-{{--                        <div th:replace="fragments/musicSheetCard :: musicSheetCard(musicsheet = ${musicsheet})"></div>--}}
-{{--                    </div>--}}
-{{--                    <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s" th:src="@{/img/service-patern.png}" alt="#"--}}
-{{--                         style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;top: 287px;right: -25px;">--}}
-{{--                    <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s" th:src="@{/img/service-patern.png}" alt="#"--}}
-{{--                         style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;bottom: -3px;left: -25px;">--}}
-{{--                </div>--}}
-{{--            </div>--}}
-{{--        </div>--}}
-{{--    </section>--}}
+                        @foreach ($musicsheets as $musicSheet)
+                            @include('fragments.musicSheetCard', $musicSheet)
+                        @endforeach
+
+                        <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s"
+                             src="{{asset('img/service-patern.png')}}" alt="#"
+                             style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;top: 287px;right: -25px;">
+                        <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s"
+                             src="{{asset('img/service-patern.png')}}" alt="#"
+                             style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;bottom: -3px;left: -25px;">
+                    </div>
+                </div>
+            </div>
+        </section>
+    @endif
 
 </div>
 @endsection

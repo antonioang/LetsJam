@@ -1,6 +1,7 @@
 
 @push('extra-css')
     <link rel="stylesheet" type="text/css" href="{{ asset('css/musicSheetCard.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{asset('/css/musicSheets.css')}}">
     <link rel="stylesheet" type="text/css" href="{{asset('/css/song.css')}}">
 @endpush
 @push('extra-js')
@@ -88,7 +89,7 @@
             </div>
         </div>
         @auth
-            @if(Auth::user()->role == 'admin')
+            @if(Auth::user()->role == 'admin' && !Request::is('home'))
                 <div class="verify-btn">
                     @if(!$musicSheet->verified)
                         <div data-verify="{{$musicSheet->id}}" class="action-container">

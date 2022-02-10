@@ -10,16 +10,17 @@ document.addEventListener("DOMContentLoaded", ()=>{
                 verifySheet(bt.dataset.verify).then(() => {
                     modal.style.display = 'none';
                     const badge = document.getElementById(bt.dataset.verify);
-                    if (badge !== null && badge.classList.contains('not-verified-badge')) {
-                        badge.classList.remove('not-verified-badge')
-                    } else {
+                    if (badge !== null && badge.classList.contains('disabled')) {
+                        badge.classList.remove('disabled')
                         const wrap = document.querySelector('.left-container')
-                        let p = document.createElement('p');
-                        p.innerHTML = 'Lo spartito è stato verificato con successo';
-                        p.classList.add('mt-4');
-                        p.style.fontStyle = 'bold';
-                        p.style.color = '#3763EB';
-                        wrap.appendChild(p);
+                        if(wrap) {
+                            let p = document.createElement('p');
+                            p.innerHTML = 'Lo spartito è stato verificato con successo';
+                            p.classList.add('mt-4');
+                            p.style.fontStyle = 'bold';
+                            p.style.color = '#3763EB';
+                            wrap.appendChild(p);
+                        }
                     }
                     bt.style.display='none';
                 })

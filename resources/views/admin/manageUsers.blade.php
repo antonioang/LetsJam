@@ -44,11 +44,14 @@
                 <h1 class="mb-3">Gestisci gli utenti</h1>
                 <div class="bodyUserWrap">
                     @foreach($users as $user)
-                    <div class="userWrap">
-                        @include('fragments.userCard', $user)
-                    </div>
+                        @if($user->id !== Auth::user()->id)
+                            <div class="userWrap">
+                                @include('fragments.userCard', $user)
+                            </div>
+                        @endif
                     @endforeach
                 </div>
+                {{$users->links('pagination::bootstrap-4')}}
                 <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s" src="{{asset('img/service-patern.png')}}" alt="#"
                      style="visibility: visible; animation-delay: 0.5s; animation-name: fadeInLeft;position: absolute;top: 65px;right: -55px;">
 

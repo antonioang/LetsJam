@@ -33,7 +33,7 @@ class MainController extends Controller
     }
 
     public function manageUsers() {
-        $users = User::all();
+        $users = User::paginate(8);
         return view('admin.manageUsers', ['users' => $users]);
     }
 

@@ -55,7 +55,7 @@
 
                         </div>
                         <!-- Existing song -->
-                        <input id="chooseSong" name="song" type="text" placeholder="Scrivi il titolo o l\u0027autore del brano" />
+                        <input id="chooseSong" name="song" type="text" placeholder="Scrivi il titolo o l'autore del brano" />
                         <ul id="songList">
                             <!-- songs result from search -->
                         </ul>
@@ -86,7 +86,7 @@
                                     <input type="radio" name="musicSheetVisibility" id="option1" value="0" autocomplete="off" checked>
                                 </label>
                                 <label class="btn btn-primary" inline="text">
-                                    Privato
+                                    Publico
                                     <input type="radio" name="musicSheetVisibility" id="option2" autocomplete="off" value="1">
                                 </label>
                             </div>

@@ -58,10 +58,12 @@ class SongController extends Controller
     public function show(int $id)
     {
         $song = Song::find($id);
+        $sheets = MusicSheet::where('song_id', $id)->withCount('likes')->get();
 
         return view('songs.song', [
             'song' => $song,
             'readable' => $song->lyrics,
+            'musicsheets' => $sheets,
         ]);
     }
 

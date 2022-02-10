@@ -134,9 +134,9 @@
                     </div>
 
                     @foreach ($mostpopular as $musicSheet)
-{{--                        <p>This is user {{ $musicsheet->id }}</p>--}}
-{{--                            <div th:replace="fragments/musicSheetCard :: musicSheetCard(musicsheet = ${musicsheet})"></div>--}}
-                        @include('fragments.musicSheetCard',$musicSheet)
+                        @if($musicSheet->visibility)
+                            @include('fragments.musicSheetCard',$musicSheet)
+                        @endif
                     @endforeach
 
                     <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s"
@@ -166,7 +166,9 @@
                             @if(!$sheet->isEmpty())
                                 <h3 class="wow fadeInUp genreTitle mt-5 mb-3" data-wow-delay=".4s">{{$key}}</h3>
                                 @foreach ($sheet as $musicSheet)
-                                    @include('fragments.musicSheetCard',$musicSheet)
+                                    @if($musicSheet->visibility)
+                                        @include('fragments.musicSheetCard',$musicSheet)
+                                    @endif
                                 @endforeach
                             @endif
                         @endforeach
@@ -193,7 +195,7 @@
                         <div class="section-title">
                             <span class="wow fadeInDown" data-wow-delay=".2s" style="visibility: visible; animation-delay: 0.2s; animation-name: fadeInDown;">Let's Jam</span>
                             <h2 class="wow fadeInUp" data-wow-delay=".4s" style="visibility: visible; animation-delay: 0.4s; animation-name: fadeInUp;" >Let's Jam è un punto di svolta per i compositori di tutti i livelli</h2>
-                            <p class="wow fadeInUp" data-wow-delay=".6s" style="visibility: visible; animation-delay: 0.6s; animation-name: fadeInUp;">Il posto perfetto per crescere come compositori e musicisti. Let\u0027s Jam vi offre tutti gli strumenti per ravvivare la tua passione per la musica</p>
+                            <p class="wow fadeInUp" data-wow-delay=".6s" style="visibility: visible; animation-delay: 0.6s; animation-name: fadeInUp;">Il posto perfetto per crescere come compositori e musicisti. Let's Jam vi offre tutti gli strumenti per ravvivare la tua passione per la musica</p>
                         </div>
                     </div>
                 </div>

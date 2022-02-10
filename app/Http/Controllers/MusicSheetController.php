@@ -58,7 +58,7 @@ class MusicSheetController extends Controller
         $musicSheet->title = $title;
         $musicSheet->author = $author;
         $musicSheet->verified = 1;
-        $musicSheet->visibility = 1;
+        $musicSheet->visibility = $request->input('musicSheetVisibility');
         $musicSheet->rearranged = 1;
         $musicSheet->music_sheet_data = $jsonBrano;
         $musicSheet->has_tablature = $this->hasTab($jsonBrano);
@@ -118,15 +118,13 @@ class MusicSheetController extends Controller
         return view('musicsheets.musicSheet', [
             'musicSheet' => $musicSheet->fresh(),
             'musicsheetdata' => $musicsheetdata,
+            'comments' => [],
         ]);
     }
 
     //show one musicsheet
     public function show(int $id)
     {
-        $available_instruments= ["Piano", "Organ", "Violin", "Cello", "Contrabass", "BassAcoustic", "BassElectric",
-            "Guitar", "Banjo", "Sax", "Trumpet", "Horn", "Trombone", "Tuba", "Flute", "Oboe", "Clarinet", "Drum"];
-
         $sheet = MusicSheet::where('id', $id)->withCount('likes')->first();
 
         $instrumentMapping = $this->extractInstruments($sheet->music_sheet_data);
@@ -334,9 +332,13 @@ class MusicSheetController extends Controller
         $sortDirection = $request->input('sortDirection') ? $request->input('sortDirection') : '';
 
         $musicsheets = MusicSheet::whereHas('genres', function ($query) use ($checkedGenres) {
-            $query->whereIn('id', $checkedGenres);
+            if ($checkedGenres !== []) {
+                $query->whereIn('id', $checkedGenres);
+            }
         })->orWhereHas('instruments', function ($query) use ($checkedInstruments) {
-            $query->whereIn('id', $checkedInstruments);
+            if ($checkedInstruments !== []) {
+                $query->whereIn('id', $checkedInstruments);
+            }
         })->when($sortOrder, function ($query) use ($sortOrder, $sortDirection) {
             $query->orderBy($sortOrder, $sortDirection);
         })->withCount('likes')->paginate(5);

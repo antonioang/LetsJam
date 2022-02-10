@@ -123,7 +123,9 @@
                      style="padding: 20px;overflow-y: scroll; overflow-x:hidden">
                     <h1 class="mb-3"> Tutti i nostri spartiti</h1>
                     @foreach ($musicSheets as $musicSheet)
-                        @include('fragments.musicSheetCard', $musicSheet)
+                        @if($musicSheet->visibility)
+                            @include('fragments.musicSheetCard',$musicSheet)
+                        @endif
                     @endforeach
                     <img class="service-patern wow fadeInRight overlay-image" data-wow-delay=".5s"
                          src="{{asset('/img/service-patern.png')}}" alt="#"

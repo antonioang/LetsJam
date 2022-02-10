@@ -6,6 +6,7 @@ use App\Models\Song;
 use Genius\Genius;
 use Http\Message\Authentication\Bearer;
 use Illuminate\Support\Facades\Http;
+use Illuminate\Support\Facades\Log;
 use SpotifyWebAPI\Session;
 use SpotifyWebAPI\SpotifyWebAPI;
 
@@ -48,6 +49,7 @@ class Utils
     {
         $song = $this->api->getTrack($id);
         $result = $this->genius->getSearchResource()->get($song->name);
+
 
         $rawLyrics = Http::get($this->GENIUS_EMBED_URL_HEAD . $result->hits[0]->result->id . $this->GENIUS_EMBED_URL_TAIL);
         $radable = $this->getReadableLyrics($rawLyrics);
