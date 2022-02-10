@@ -34,7 +34,8 @@ Route::middleware(['user-role'])->group(function() {
     Route::post('/admin/manageUsers', [MainController::class, 'promoteUsers']);
     Route::post('/admin/deleteUsers', [MainController::class, 'deleteUsers']);
     Route::get('/admin/verifyMusicsheet', [MainController::class, 'indexSheets']);
-    Route::post('/admin/verifyMusicsheet', [MainController::class, 'verifySheets']);
+    Route::post('/admin/verifyMusicsheet', [MainController::class, 'indexSheets']);
+    Route::post('/admin/verifySingleMusicsheet', [MainController::class, 'verifySheets']);
 });
 
 Route::middleware(['auth'])->group(function() {

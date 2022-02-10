@@ -17,7 +17,7 @@
                     @csrf
                     <div class="search mb-5">
                         @include('fragments.icons.search')
-                        <input type="text" placeholder="Cerca">
+                        <input type="text" name="textSearch" placeholder="Cerca">
                     </div>
 
 

@@ -15,11 +15,11 @@
         <section class="hero-area">
             <div class="row">
                 <div class="sidebar">
-                    <form action="{{route('filter')}}" method="post" id="sidebar-form">
+                    <form action="{{route('filter')}}" method="POST" id="sidebar-form">
                         @csrf
                         <div class="search mb-5">
                             @include('fragments.icons.search')
-                            <input type="text" placeholder="Cerca">
+                            <input type="text" name="textSearch" placeholder="Cerca">
                         </div>
 
 
@@ -108,11 +108,11 @@
 
                             <div class="sub-option-container">
                                 <div class="checkbox-option">
-                                    <input type="checkbox" name="verified" class="form-check-input">
+                                    <input type="checkbox" {{$verified == '1' ? 'checked' : false}} name="verified" value="1" class="form-check-input">
                                     <p>Verificato</p>
                                 </div>
                                 <div class="checkbox-option">
-                                    <input type="checkbox" name="rearranged" class="form-check-input">
+                                    <input type="checkbox" {{$rearranged == '1' ? 'checked' : false}} name="rearranged" value="1" class="form-check-input">
                                     <p>Riarrangiato</p>
                                 </div>
                             </div>

@@ -7,6 +7,7 @@ use App\Models\Instrument;
 use App\Models\Song;
 use App\Services\Utility\Utils;
 use App\Models\User;
+use \Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use App\Models\Genre;
 use App\Models\MusicSheet;
@@ -27,6 +28,8 @@ class MusicSheetController extends Controller
             'checkedGenres' => [],
             'checkedInstruments' => [],
             'genres' => Genre::all(),
+            'rearranged' => 0,
+            'verified' => 0,
             'instruments' => Instrument::all(),
             'sortDirection' => 'ASC',
             'sortOrderr' => '',
@@ -327,26 +330,33 @@ class MusicSheetController extends Controller
     public function filter(Request $request)
     {
         $checkedGenres = $request->input('genre') ? $request->input('genre') : [];
+        $textSearch = $request->input('textSearch') ? $request->input('textSearch') : '';
+        $rearranged = $request->input('rearranged') ? intval($request->input('rearranged')) : '0';
+        $verified = $request->input('verified') ? intval($request->input('verified')) : '0';
         $checkedInstruments = $request->input('instrument') ? $request->input('instrument') : [];
         $sortOrder = $request->input('order') ? $request->input('order') : '';
         $sortDirection = $request->input('sortDirection') ? $request->input('sortDirection') : '';
 
-        $musicsheets = MusicSheet::whereHas('genres', function ($query) use ($checkedGenres) {
-            if ($checkedGenres !== []) {
-                $query->whereIn('id', $checkedGenres);
-            }
-        })->orWhereHas('instruments', function ($query) use ($checkedInstruments) {
-            if ($checkedInstruments !== []) {
-                $query->whereIn('id', $checkedInstruments);
-            }
-        })->when($sortOrder, function ($query) use ($sortOrder, $sortDirection) {
-            $query->orderBy($sortOrder, $sortDirection);
-        })->withCount('likes')->paginate(5);
 
+        $musicsheets = MusicSheet::whereHas('genres', function (Builder $query) use ($checkedGenres) {
+            $query->whereIn('id', $checkedGenres);
+        })->orWhereHas('instruments', function (Builder $query) use ($checkedInstruments) {
+            $query->whereIn('id', $checkedInstruments);
+        })->orWhere('title','like', "%$textSearch%")
+        ->when($sortOrder, function (Builder $query) use ($sortOrder, $sortDirection) {
+            $query->orderBy($sortOrder, $sortDirection);
+        })->when($verified, function (Builder $query) use ($verified) {
+            $query->where('verified', $verified);
+        })->when($rearranged, function (Builder $query) use ($rearranged) {
+            $query->where('rearranged', $rearranged);
+        })->withCount('likes')
+        ->paginate(5);
 
         return view('musicsheets.all', [
             'checkedGenres' => $checkedGenres,
             'genres' => Genre::all(),
+            'rearranged' => $rearranged,
+            'verified' => $verified,
             'sortDirection' => $sortDirection,
             'checkedInstruments' => $checkedInstruments,
             'instruments' => Instrument::all(),

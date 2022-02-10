@@ -32,7 +32,7 @@ document.addEventListener("DOMContentLoaded", ()=>{
 async function verifySheet(id) {
     let formData = new FormData();
     formData.append("musicSheetId", id);
-    return await fetch('/admin/verifyMusicsheet', {
+    return await fetch('/admin/verifySingleMusicsheet', {
         headers: {
             'X-CSRF-TOKEN': document.head.querySelector("[name=csrf-token]").content
         },

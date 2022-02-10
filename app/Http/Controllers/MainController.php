@@ -6,14 +6,13 @@ use App\Models\Genre;
 use App\Models\Instrument;
 use App\Models\MusicSheet;
 use App\Models\User;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 
 class MainController extends Controller
 {
     public function index(Request $request)
     {
-
-//        $mostpopular = MusicSheet::has('likes')->take(5)->get();
         $mostpopular = MusicSheet::has('likes')->withCount('likes')->take(5)->orderByDesc('likes_count')->get();
         $genres = Genre::all();
         $sheetsForGenres = [];
@@ -23,7 +22,6 @@ class MainController extends Controller
             })->withCount('likes')->take(5)->get();
 
             $sheetsForGenres[$genre->name] = $forGenres;
-
         }
 
         return view('home.home', [
@@ -59,7 +57,30 @@ class MainController extends Controller
         return view('admin.manageUsers', ['users' => $users->fresh()]);
     }
 
-    public function indexSheets() {
+    public function indexSheets(Request $request) {
+        $checkedGenres = $request->input('genre') ? $request->input('genre') : [];
+        $textSearch = $request->input('textSearch') ? $request->input('textSearch') : '';
+        $rearranged = $request->input('rearranged') ? intval($request->input('rearranged')) : '0';
+        $verified = $request->input('verified') ? intval($request->input('verified')) : '0';
+        $checkedInstruments = $request->input('instrument') ? $request->input('instrument') : [];
+        $sortOrder = $request->input('order') ? $request->input('order') : '';
+        $sortDirection = $request->input('sortDirection') ? $request->input('sortDirection') : '';
+
+
+        $musicsheets = MusicSheet::whereHas('genres', function (Builder $query) use ($checkedGenres) {
+            $query->whereIn('id', $checkedGenres);
+        })->orWhereHas('instruments', function (Builder $query) use ($checkedInstruments) {
+            $query->whereIn('id', $checkedInstruments);
+        })->orWhere('title','like', "%$textSearch%")
+            ->when($sortOrder, function (Builder $query) use ($sortOrder, $sortDirection) {
+                $query->orderBy($sortOrder, $sortDirection);
+            })->when($verified, function (Builder $query) use ($verified) {
+                $query->where('verified', $verified);
+            })->when($rearranged, function (Builder $query) use ($rearranged) {
+                $query->where('rearranged', $rearranged);
+            })->withCount('likes')
+            ->paginate(5);
+
         return view('admin.adminVerifySheets', [
             'checkedGenres' => [],
             'checkedInstruments' => [],
@@ -67,7 +88,7 @@ class MainController extends Controller
             'instruments' => Instrument::all(),
             'sortDirection' => 'ASC',
             'sortOrderr' => '',
-            'musicSheets' => MusicSheet::withCount('likes')->paginate(5)
+            'musicSheets' => $musicsheets
         ]);
     }
 
@@ -77,6 +98,10 @@ class MainController extends Controller
         $toManage->verified = 1;
         $toManage->save();
         return response('ok',200);
+    }
+
+    public function filterSheets() {
+        return view('aboutus.aboutus');
     }
 
     public function aboutUs() {

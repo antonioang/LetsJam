@@ -17,11 +17,11 @@
     <section class="hero-area">
         <div class="row">
             <div class="sidebar">
-                <form th:action="@{/musicsheets/}" th:object="${formData}" method="post" id="sidebar-form">
+                <form action="/admin/verifyMusicsheet" method="POST" id="sidebar-form">
                     @csrf
                     <div class="search mb-5">
                         @include('fragments.icons.search')
-                        <input type="text" placeholder="Cerca">
+                        <input type="text" name="textSearch" placeholder="Cerca">
                     </div>
 
 
@@ -36,7 +36,7 @@
                         <div class="sub-option-container">
                             @foreach ($genres as $genre)
                                 <div class="checkbox-option">
-                                    <input type="checkbox" class="form-check-input" {{in_array($genre->id,$checkedGenres) ? 'checked' : false}} name="genre[]   " value="{{$genre->id}}">
+                                    <input type="checkbox" class="form-check-input" {{in_array($genre->id,$checkedGenres) ? 'checked' : false}} name="genre[]" value="{{$genre->id}}">
                                     <p style="text-transform: capitalize;">{{$genre->name}}</p>
                                 </div>
                             @endforeach

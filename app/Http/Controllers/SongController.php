@@ -70,12 +70,14 @@ class SongController extends Controller
     public function filter(Request $request)
     {
         $checkedGenres = $request->input('genre') ? $request->input('genre') : [];
+        $textSearch = $request->input('textSearch') ? $request->input('textSearch') : '';
         $sortOrder = $request->input('order') ? $request->input('order') : '';
         $sortDirection = $request->input('sortDirection') ? $request->input('sortDirection') : '';
         $filters = $request->input('filter') ? $request->input('filter') : '';
         $albumType = $request->input('album_type') ? $request->input('album_type') : '';
 
         $songs = Song::whereIn('genre_id', $checkedGenres)
+            ->orWhere('title','like', "%$textSearch%")
             ->when($sortOrder, function ($query) use ($sortOrder, $sortDirection) {
                 $query->orderBy($sortOrder, $sortDirection);
             })->when($filters, function ($query) use ($sortOrder, $sortDirection) {
